@@ -1,62 +1,183 @@
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 50px;
-}
-
-.benefit-card {
+.career-page {
   background-color: var(--white);
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
-  transition: transform 0.3s ease;
 }
 
-.benefit-card:hover {
-  transform: translateY(-5px);
+/* Career Hero Section */
+.career-hero {
+  background: linear-gradient(135deg, var(--primary-green) 0%, #27ae60 100%);
+  color: var(--white);
+  padding: 60px 0;
 }
 
-.benefit-card h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 15px;
-  color: var(--primary-green);
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+  font-size: 0.95rem;
 }
 
-.benefit-card p {
-  color: var(--gray);
-  line-height: 1.8;
+.breadcrumb-nav a {
+  color: var(--white);
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
 }
 
-.open-positions-section {
-  background-color: var(--off-white);
+.breadcrumb-nav a:hover {
+  opacity: 1;
 }
 
-.positions-list {
+.breadcrumb-nav .separator {
+  color: var(--white);
+  opacity: 0.7;
+}
+
+.breadcrumb-nav span {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.hero-content-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 50px;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-.position-card {
-  background-color: var(--white);
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.position-card h3 {
-  font-size: 1.5rem;
+.hero-text h1 {
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 15px;
-  color: var(--black);
-}
-
-.position-card p {
-  color: var(--gray);
   margin-bottom: 20px;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
   line-height: 1.8;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0;
+}
+
+.hero-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration-image {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  object-fit: contain;
+}
+
+/* No Openings Section */
+.no-openings-section {
+  padding: 80px 0;
+  background-color: var(--off-white);
+  text-align: center;
+}
+
+.no-openings-text {
+  font-size: 1.1rem;
+  color: var(--gray);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.no-openings-text a {
+  color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.no-openings-text a:hover {
+  color: #27ae60;
+  text-decoration: underline;
+}
+
+/* No Openings Content */
+.no-openings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.no-openings-text {
+  font-size: 1.1rem;
+  color: var(--gray);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.hiring-section {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary-green);
+}
+
+.hiring-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 15px 0;
+}
+
+.hiring-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.hiring-list li {
+  font-size: 1rem;
+  color: var(--gray);
+  padding: 8px 0;
+  padding-left: 25px;
+  position: relative;
+}
+
+.hiring-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--primary-green);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.hiring-note {
+  font-size: 0.95rem;
+  color: var(--gray);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .career-hero {
+    padding: 40px 0;
+  }
+
+  .no-openings-section {
+    padding: 60px 0;
+  }
 }

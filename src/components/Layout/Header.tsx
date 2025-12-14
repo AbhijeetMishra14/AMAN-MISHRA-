@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AmanLogo from '../../assets/AMAN.png';
+import StartProjectModal from '../StartProjectModal';
 import './Header.css';
 
 const Header = () => {
@@ -7,13 +9,24 @@ const Header = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isCompanyOpen, setIsCompanyOpen] = useState(false);
+  const [isWebDevOpen, setIsWebDevOpen] = useState(false);
+  const [isDigitalMarketingOpen, setIsDigitalMarketingOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <header className="header">
+      <StartProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      
       <div className="container">
         <div className="header-content">
           <Link to="/" className="logo">
-            <span className="logo-text">Makura Creations</span>
+            <div className="logo-icon">
+              <img src={AmanLogo} alt="Aman Mishra" className="logo-image" />
+            </div>
+            <div className="logo-text-container">
+              <span className="logo-text-main">AMAN</span>
+              <span className="logo-text-main2">MISHRA</span>
+            </div>
           </Link>
 
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
@@ -24,7 +37,12 @@ const Header = () => {
               onMouseEnter={() => setIsCompanyOpen(true)}
               onMouseLeave={() => setIsCompanyOpen(false)}
             >
-              <span className="nav-link">Company</span>
+              <span className="nav-link">
+                Company
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
               <div className={`dropdown-menu ${isCompanyOpen ? 'show' : ''}`}>
                 <Link to="/about" className="dropdown-item">About Us</Link>
                 <Link to="/contact" className="dropdown-item">Contact</Link>
@@ -37,17 +55,50 @@ const Header = () => {
               onMouseEnter={() => setIsServicesOpen(true)}
               onMouseLeave={() => setIsServicesOpen(false)}
             >
-              <span className="nav-link">Services</span>
+              <span className="nav-link">
+                Services
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
               <div className={`dropdown-menu ${isServicesOpen ? 'show' : ''}`}>
-                <Link to="/service/web-development-service" className="dropdown-item">Web Development</Link>
-                <Link to="/service/wordpress-development" className="dropdown-item">WordPress Development</Link>
-                <Link to="/service/digital-marketing" className="dropdown-item">Digital Marketing</Link>
-                <Link to="/service/seo-service-nepal" className="dropdown-item">Search Engine Optimization (SEO)</Link>
-                <Link to="/service/answer-engine-optimization-aeo" className="dropdown-item">Answer Engine Optimization (AEO)</Link>
-                <Link to="/service/promotional-video" className="dropdown-item">Promotional Video</Link>
+                {/* Web Development */}
+                <div 
+                  className="dropdown-submenu"
+                  onMouseEnter={() => setIsWebDevOpen(true)}
+                  onMouseLeave={() => setIsWebDevOpen(false)}
+                >
+                  <span className="dropdown-item dropdown-submenu-trigger">
+                    Web Development
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <div className={`dropdown-submenu-menu ${isWebDevOpen ? 'show' : ''}`}>
+                    <Link to="/service/wordpress-development" className="dropdown-item">WordPress Development</Link>
+                  </div>
+                </div>
+
+                {/* Digital Marketing */}
+                <div 
+                  className="dropdown-submenu"
+                  onMouseEnter={() => setIsDigitalMarketingOpen(true)}
+                  onMouseLeave={() => setIsDigitalMarketingOpen(false)}
+                >
+                  <span className="dropdown-item dropdown-submenu-trigger">
+                    Digital Marketing
+                    <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 1L5 5L1 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                  <div className={`dropdown-submenu-menu ${isDigitalMarketingOpen ? 'show' : ''}`}>
+                    <Link to="/service/seo-service-nepal" className="dropdown-item">Search Engine Optimization (SEO)</Link>
+                    <Link to="/service/promotional-video" className="dropdown-item">Promotional Video</Link>
+                  </div>
+                </div>
+
+                {/* Individual Services */}
                 <Link to="/service/ui-ux-design" className="dropdown-item">UI/UX Design</Link>
-                <Link to="/service/mobile-app-development" className="dropdown-item">Mobile App Development</Link>
-                <Link to="/service/ai-workflow-automation" className="dropdown-item">AI Workflows Automation</Link>
               </div>
             </div>
 
@@ -56,21 +107,26 @@ const Header = () => {
               onMouseEnter={() => setIsResourcesOpen(true)}
               onMouseLeave={() => setIsResourcesOpen(false)}
             >
-              <span className="nav-link">Resources</span>
+              <span className="nav-link">
+                Resources
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
               <div className={`dropdown-menu ${isResourcesOpen ? 'show' : ''}`}>
-                <Link to="/portfolio" className="dropdown-item">Portfolio</Link>
-                <Link to="/case-study" className="dropdown-item">Case Study</Link>
-                <Link to="/free-resources" className="dropdown-item">Free Resources</Link>
+                <Link to="/pricing" className="dropdown-item">Pricing</Link>
               </div>
             </div>
 
             <Link to="/blogs" className="nav-link">Blog</Link>
-            <Link to="/free-seo-audit" className="nav-link">Free SEO Audit</Link>
           </nav>
 
-          <Link to="/contact" className="btn btn-primary">
-            Start your project
-          </Link>
+          <button 
+            className="btn btn-nav"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Start your project →
+          </button>
 
           <button 
             className="mobile-menu-toggle"

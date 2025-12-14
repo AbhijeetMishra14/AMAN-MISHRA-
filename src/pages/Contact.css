@@ -1,35 +1,299 @@
-.contact-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  margin-top: 50px;
+.contact-page {
+  background-color: var(--white);
 }
 
-.contact-info h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: var(--black);
+/* Breadcrumb */
+.breadcrumb-section {
+  padding: 30px 0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.info-item {
-  margin-bottom: 40px;
-  padding: 30px;
-  background-color: var(--off-white);
-  border-radius: 10px;
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
 }
 
-.info-item h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 15px;
+.breadcrumb a {
+  color: var(--gray);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
   color: var(--primary-green);
 }
 
-.info-item p {
+.breadcrumb .separator {
   color: var(--gray);
-  margin: 8px 0;
+}
+
+.breadcrumb span {
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Get in Touch Section */
+.get-in-touch-section {
+  padding: 80px 0;
+  background-color: var(--white);
+}
+
+.get-in-touch-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.touch-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.illustration-image {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  object-fit: contain;
+}
+
+.touch-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--black);
+}
+
+.touch-description {
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 40px;
   line-height: 1.6;
+}
+
+/* Contact Info Items */
+.contact-info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.phone-icon {
+  background-color: #1a202c;
+}
+
+.email-icon {
+  background-color: #1a202c;
+}
+
+.location-icon {
+  background-color: #1a202c;
+}
+
+.contact-text {
+  flex: 1;
+}
+
+.contact-label {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--black);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-value:hover {
+  color: var(--primary-green);
+}
+
+/* Let's Talk Section */
+.lets-talk-section {
+  padding: 80px 0;
+  background-color: var(--off-white);
+}
+
+.lets-talk-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.talk-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.talk-form {
+  background-color: var(--white);
+  padding: 40px;
+  border-radius: 12px;
+}
+
+.talk-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--black);
+}
+
+.talk-description {
+  color: var(--gray);
+  margin-bottom: 30px;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Contact Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--black);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 12px 15px;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  color: var(--black);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  background-color: #efefef;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* Submit Button */
+.btn-submit {
+  background-color: #16A34A;
+  color: var(--white);
+  border: none;
+  padding: 12px 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background-color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .get-in-touch-wrapper,
+  .lets-talk-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .touch-content h2,
+  .talk-form h2 {
+    font-size: 1.8rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .illustration-placeholder {
+    height: 300px;
+  }
+
+  .talk-form {
+    padding: 30px;
+  }
+
+  .contact-info-items {
+    gap: 20px;
+  }
 }
 
 .contact-form {

@@ -1,43 +1,144 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { allBlogPosts } from '../data/blogData';
 import './Blog.css';
 
 const Blog = () => {
-  const blogPosts = [
-    { slug: 'best-chatgpt-seo-agency', title: 'Best ChatGPT SEO Agencies To Watch', date: '10, Dec 2025' },
-    { slug: 'youtube-monetization-in-nepal', title: 'How To Monetize Youtube Channel In Nepal', date: '10, Dec 2025' },
-    { slug: 'how-to-monetize-facebook-page', title: 'How To Monetize Facebook Page In Nepal', date: '03, Dec 2025' },
-    { slug: 'seo-agency-in-australia', title: 'SEO Agency in Australia: Proven Strategies', date: '21, Nov 2025' },
-    { slug: 'website-development-for-school', title: 'Website Development for School', date: '17, Oct 2025' },
-    { slug: 'ai-chatbot-for-website', title: 'AI Chatbot for Website', date: '08, Oct 2025' },
-    { slug: 'importance-of-link-building', title: 'Importance of Link Building in SEO', date: '19, Sep 2025' },
-    { slug: 'what-is-seo', title: 'What is SEO? A Complete Guide for Beginners', date: '08, Mar 2024' }
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
+
+  const categories = [
+    'Company',
+    'Digital Marketing',
+    'Mobile App Development',
+    'News & Updates',
+    'Testing & Deployment',
+    'Uncategorized',
+    'Web Development'
   ];
+
+  const totalPages = Math.ceil(allBlogPosts.length / postsPerPage);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = allBlogPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      handlePageClick(currentPage + 1);
+    }
+  };
+
+  const getPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5;
+
+    if (totalPages <= maxButtons) {
+      for (let i = 1; i <= totalPages; i++) {
+        buttons.push(i);
+      }
+    } else {
+      buttons.push(1);
+      if (currentPage > 3) buttons.push('...');
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        if (!buttons.includes(i)) buttons.push(i);
+      }
+      if (currentPage < totalPages - 2) buttons.push('...');
+      buttons.push(totalPages);
+    }
+
+    return buttons;
+  };
 
   return (
     <div className="blog-page">
-      <section className="page-hero">
-        <div className="container">
+      <section className="blog-hero">
+        <div className="blog-hero-content">
+          <div className="breadcrumb-content">
+            <Link to="/">Home</Link>
+            <span className="separator">•</span>
+            <span>Blog</span>
+          </div>
           <h1>Blog</h1>
-          <p>Keep up to date with the industry and gain insights</p>
+          <p>Makura gives you access to a collection of numerous blogs to keep you well-informed. Just read one article a week from Makura to keep your mind active.</p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="blog-list">
-            {blogPosts.map((post, index) => (
-              <Link key={index} to={`/blogs/${post.slug}`} className="blog-post-card">
-                <div className="blog-post-image">
-                  <div className="blog-placeholder">Blog Image</div>
-                </div>
-                <div className="blog-post-content">
-                  <span className="blog-post-date">{post.date}</span>
-                  <h2>{post.title}</h2>
-                  <span className="read-more">Read More →</span>
-                </div>
-              </Link>
-            ))}
+      <section className="blog-section">
+        <div className="blog-container">
+          <div className="blog-wrapper">
+            <aside className="blog-sidebar">
+              <div className="sidebar-section">
+                <h3>Category</h3>
+                <ul className="category-list">
+                  {categories.map((category, index) => (
+                    <li key={index}>
+                      <a href="#">{category}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+
+            <main className="blog-main">
+              <div className="blog-posts-grid">
+                {currentPosts.map((post, index) => (
+                  <Link key={index} to={`/blogs/${post.slug}`} className="blog-post-card">
+                    <div className="blog-post-image">
+                      <div className="blog-image-placeholder"></div>
+                    </div>
+                    <div className="blog-post-info">
+                      <div className="blog-meta">
+                        <span className="blog-date">📅 {post.date}</span>
+                        <span className="blog-views">👁️ {post.views} Views</span>
+                      </div>
+                      <h3 className="blog-title">{post.title}</h3>
+                      <p className="blog-description">{post.description}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="blog-pagination">
+                {getPaginationButtons().map((button, index) => (
+                  <button
+                    key={index}
+                    className={`pagination-btn ${button === currentPage ? 'active' : ''} ${button === '...' ? 'ellipsis' : ''}`}
+                    onClick={() => button !== '...' && handlePageClick(button)}
+                    disabled={button === '...'}
+                  >
+                    {button}
+                  </button>
+                ))}
+                <button
+                  className={`pagination-btn next ${currentPage === totalPages ? 'disabled' : ''}`}
+                  onClick={handleNext}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+
+              <div className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </div>
+            </main>
           </div>
+        </div>
+      </section>
+
+      <section className="blog-cta-section">
+        <div className="cta-content">
+          <h2>Keep up to date with the industry and gain insights into the field through our educational blog posts.</h2>
+          <button className="cta-button">Start a project</button>
+        </div>
+        <div className="cta-decoration">
+          <div className="character-left"></div>
+          <div className="character-right"></div>
         </div>
       </section>
     </div>

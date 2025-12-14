@@ -1,0 +1,43 @@
+.hero-spider-container {
+  position: absolute;
+  top: 312px;
+  left: 0px;
+  width: 500px;
+  height: 400px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-spider-container canvas {
+  width: 500px !important;
+  height: 400px !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.hero > .hero-spider-container {
+  position: absolute;
+  top: 312px;
+  left: 0px;
+}
+
+@media (max-width: 968px) {
+  .hero-spider-container,
+  .hero > .hero-spider-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    margin: 40px auto 0;
+  }
+
+  .hero-spider-container canvas {
+    width: 100% !important;
+    max-width: 500px !important;
+    height: 400px !important;
+  }
+}

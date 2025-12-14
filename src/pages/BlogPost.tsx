@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import './BlogPost.css';
 
 const BlogPost = () => {
-  const { slug } = useParams();
+  const { slug: _slug } = useParams();
 
   // In a real app, you would fetch the blog post data based on the slug
   const blogPost = {
@@ -22,7 +22,7 @@ const BlogPost = () => {
           <h1>{blogPost.title}</h1>
           <div className="blog-post-meta">
             <span>Published {blogPost.date}</span>
-            <span>By Makura Creations</span>
+            <span>By Aman Mishra</span>
           </div>
           <div className="blog-post-content">
             <p>{blogPost.content}</p>

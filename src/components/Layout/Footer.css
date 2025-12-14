@@ -1,5 +1,5 @@
 .footer {
-  background-color: var(--black);
+  background-color: #0e6b0b;
   color: var(--white);
   padding: 60px 0 30px;
   margin-top: 80px;
@@ -21,7 +21,7 @@
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 20px;
-  color: var(--primary-green);
+  color: var(--black);
 }
 
 .footer-links {

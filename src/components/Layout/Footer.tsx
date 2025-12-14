@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { FaFacebook, FaInstagram, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import './Footer.css';
 
 const Footer = () => {
@@ -11,8 +12,6 @@ const Footer = () => {
             <ul className="footer-links">
               <li><Link to="/">Home</Link></li>
               <li><Link to="/about">About</Link></li>
-              <li><Link to="/portfolio">Portfolio</Link></li>
-              <li><Link to="/case-study">Case Studies</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
@@ -22,10 +21,7 @@ const Footer = () => {
             <ul className="footer-links">
               <li><Link to="/service/wordpress-development">WordPress Development</Link></li>
               <li><Link to="/service/seo-service-nepal">SEO Service in Nepal</Link></li>
-              <li><Link to="/service/answer-engine-optimization-aeo">Answer Engine Optimization (AEO)</Link></li>
               <li><Link to="/service/ui-ux-design">UI/UX Design</Link></li>
-              <li><Link to="/service/web-development-service">Website Development</Link></li>
-              <li><Link to="/service/mobile-app-development">Mobile App Development</Link></li>
               <li><Link to="/service/digital-marketing">Digital Marketing</Link></li>
               <li><Link to="/service/promotional-video">Promotional Video</Link></li>
             </ul>
@@ -34,12 +30,9 @@ const Footer = () => {
           <div className="footer-section">
             <h3 className="footer-title">Socials</h3>
             <ul className="footer-social">
-              <li><a href="#" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-              <li><a href="#" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-              <li><a href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-              <li><a href="#" target="_blank" rel="noopener noreferrer">TikTok</a></li>
-              <li><a href="#" target="_blank" rel="noopener noreferrer">Dribbble</a></li>
-              <li><a href="#" target="_blank" rel="noopener noreferrer">Behance</a></li>
+              <li><a href="https://www.facebook.com/aman.mishra.661419" target="_blank" rel="noopener noreferrer"><FaFacebook size={20} /> Facebook</a></li>
+              <li><a href="https://www.instagram.com/_motoholic_aman_/" target="_blank" rel="noopener noreferrer"><FaInstagram size={20} /> Instagram</a></li>
+              <li><a href="https://www.linkedin.com/in/aman-mishra-seo-expert/" target="_blank" rel="noopener noreferrer"><FaLinkedin size={20} /> LinkedIn</a></li>
             </ul>
           </div>
 
@@ -47,25 +40,15 @@ const Footer = () => {
             <h3 className="footer-title">Locations</h3>
             <div className="footer-location">
               <h4>Nepal</h4>
-              <p>Pulchowk, Lalitpur</p>
-              <p>01-5430240</p>
-              <p>9841969727</p>
-              <p>info@makuracreations.com</p>
-            </div>
-            <div className="footer-location">
-              <h4>USA</h4>
-              <p>9412 redstart ln fort worth TX 76118</p>
-              <p>+1 972 505 2458</p>
-              <p>9849772853</p>
-              <p>info@makuracreations.com</p>
+              <p><FaMapMarkerAlt size={16} style={{ marginRight: '8px' }} /><a href="https://www.google.com/maps/place/Flowrage+-+SEO+Agency+in+Nepal/@27.6651495,85.3358366,20z/data=!4m6!3m5!1s0x39eb19014b11d41d:0x15f4651a9f208b6e!8m2!3d27.6650984!4d85.3358996!16s%2Fg%2F11mllk54cp?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D">Gwarko At the opposite of Buddha Stupa</a></p>
+              <p><FaPhone size={16} style={{ marginRight: '8px' }} /><a href="tel:+977 9823820301">+977 9823820301</a></p>
+              <p><FaEnvelope size={16} style={{ marginRight: '8px' }} /><a href="mailto:amandreamsbig@gmail.com">amandreamsbig@gmail.com</a></p>
             </div>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <p>&copy; 2025 Makura Creations Pvt. Ltd. All rights reserved.</p>
-          <p>Registered under the Government of Nepal (Regd. No: 115274/070/071) | VAT No: 604162573</p>
-          <p className="footer-since">proudly SINCE 2013</p>
+        <div className="footer-bottom color-white">
+          <p>&copy; 2025 Aman Mishra  All rights reserved.</p>
         </div>
       </div>
     </footer>
