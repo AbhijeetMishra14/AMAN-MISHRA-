@@ -9,6 +9,7 @@ import Career from './pages/Career';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Pricing from './pages/Pricing';
+import FAQPage from './pages/FAQ';
 import WordPressDevelopment from './pages/services/WordPressDevelopment';
 import DigitalMarketing from './pages/services/DigitalMarketing';
 import SEOService from './pages/services/SEOService';
@@ -20,6 +21,8 @@ import AdminClients from './pages/AdminClients';
 import AdminPricing from './pages/AdminPricing';
 import AdminCareer from './pages/AdminCareer';
 import AdminFAQ from './pages/AdminFAQ';
+import AdminTestimonials from './pages/AdminTestimonials';
+import AdminPortfolio from './pages/AdminPortfolio';
 import BlogEditor from './pages/BlogEditor';
 import './App.css';
 
@@ -38,6 +41,7 @@ function App() {
             <Route path="/blogs" element={<Blog />} />
             <Route path="/blogs/:slug" element={<BlogPost />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/faq" element={<FAQPage />} />
             <Route path="/service/wordpress-development" element={<WordPressDevelopment />} />
             <Route path="/service/digital-marketing" element={<DigitalMarketing />} />
             <Route path="/service/seo-service-nepal" element={<SEOService />} />
@@ -46,13 +50,15 @@ function App() {
             
             {/* Admin routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/blog" element={<AdminDashboard />} />
+            <Route path="/admin/blog/new" element={<BlogEditor />} />
+            <Route path="/admin/blog/:id" element={<BlogEditor />} />
             <Route path="/admin/clients" element={<AdminClients />} />
             <Route path="/admin/pricing" element={<AdminPricing />} />
             <Route path="/admin/careers" element={<AdminCareer />} />
             <Route path="/admin/faq" element={<AdminFAQ />} />
-            <Route path="/admin/blog/new" element={<BlogEditor />} />
-            <Route path="/admin/blog/:id" element={<BlogEditor />} />
+            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+            <Route path="/admin/portfolio" element={<AdminPortfolio />} />
           </Routes>
         </main>
         <Footer />

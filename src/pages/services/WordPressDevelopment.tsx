@@ -11,11 +11,20 @@ import APIImg from '../../assets/API-Development.svg';
 import MaintenanceImg from '../../assets/wordpress-maintainence.svg';
 import FAQImg from '../../assets/faqs-blue-2.png';
 import './ServicePage.css';
+import './WordPressDevelopment.css';
 
 type PageFAQ = {
   _id: string;
   question: string;
   answer: string;
+};
+
+type Testimonial = {
+  _id: string;
+  text: string;
+  authorName: string;
+  authorCompany: string;
+  authorAvatar?: string;
 };
 
 const DEFAULT_WP_FAQS: PageFAQ[] = [
@@ -36,9 +45,35 @@ const DEFAULT_WP_FAQS: PageFAQ[] = [
   },
 ];
 
+const DEFAULT_WP_TESTIMONIALS: Testimonial[] = [
+  {
+    _id: '1',
+    text: 'Choosing Aman Mishra to build my WordPress website while I spent time organizing my resources and crafting narratives was undoubtedly the right choice. The end product is a website that looks professional and has all the newest features available. In conclusion, I am overjoyed to have partnered with Aman Mishra.',
+    authorName: 'Chandan Goopta',
+    authorCompany: 'RAIN',
+    authorAvatar: 'CG',
+  },
+  {
+    _id: '2',
+    text: 'Aman Mishra was easy and quick to work with. There were on schedule, had wonderful communication throughout, and created a fantastic WordPress website that was customized to my needs. Extremely happy with their assistance!',
+    authorName: 'Samyukta Dawadi',
+    authorCompany: 'UWS Nepal',
+    authorAvatar: 'SD',
+  },
+  {
+    _id: '3',
+    text: 'The work that Aman Mishra made on my WordPress website was superb. They were punctual, professional, and responsive. The user-friendly design has greatly increased the traffic to my website. I heartily endorse their services!',
+    authorName: 'Arsheena Piya',
+    authorCompany: 'Piya Plastics',
+    authorAvatar: 'AP',
+  },
+];
+
 const WordPressDevelopment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [faqs, setFaqs] = useState<PageFAQ[]>(DEFAULT_WP_FAQS);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(DEFAULT_WP_TESTIMONIALS);
+  const [portfolios, setPortfolios] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -55,7 +90,37 @@ const WordPressDevelopment = () => {
         setFaqs(DEFAULT_WP_FAQS);
       }
     };
+
+    const fetchTestimonials = async () => {
+      try {
+        const data = await adminService.getTestimonialsByPage('wordpress-development');
+        const testList = Array.isArray(data) ? data : (data?.testimonials || []);
+        if (testList.length > 0) {
+          setTestimonials(testList);
+        } else {
+          setTestimonials(DEFAULT_WP_TESTIMONIALS);
+        }
+      } catch (error) {
+        console.error('Failed to fetch testimonials:', error);
+        setTestimonials(DEFAULT_WP_TESTIMONIALS);
+      }
+    };
+
+    const fetchPortfolios = async () => {
+      try {
+        const data = await adminService.getPortfoliosByPage('wordpress-development');
+        const portfolioList = Array.isArray(data) ? data : [];
+        if (portfolioList.length > 0) {
+          setPortfolios(portfolioList);
+        }
+      } catch (error) {
+        console.error('Failed to fetch portfolios:', error);
+      }
+    };
+
     fetchFAQs();
+    fetchTestimonials();
+    fetchPortfolios();
   }, []);
 
   return (
@@ -332,47 +397,21 @@ const WordPressDevelopment = () => {
           <p className="testimonials-subtitle">Don't take our word for it. Hear what our clients have to say about us.</p>
 
           <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <div className="quote-mark">"</div>
-              <p className="testimonial-text">
-                Choosing Aman Mishra to build my WordPress website while I spent time organizing my resources and crafting narratives was undoubtedly the right choice. The end product is a website that looks professional and has all the newest features available. In conclusion, I am overjoyed to have partnered with Aman Mishra.
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">CG</div>
-                <div>
-                  <div className="author-name">Chandan Goopta</div>
-                  <div className="author-company">RAIN</div>
+            {testimonials.map((testimonial) => (
+              <div key={testimonial._id} className="testimonial-card">
+                <div className="quote-mark">"</div>
+                <p className="testimonial-text">
+                  {testimonial.text}
+                </p>
+                <div className="testimonial-author">
+                  <div className="author-avatar">{testimonial.authorAvatar}</div>
+                  <div>
+                    <div className="author-name">{testimonial.authorName}</div>
+                    <div className="author-company">{testimonial.authorCompany}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="testimonial-card">
-              <div className="quote-mark">"</div>
-              <p className="testimonial-text">
-                Aman Mishra was easy and quick to work with. There were on schedule, had wonderful communication throughout, and created a fantastic WordPress website that was customized to my needs. Extremely happy with their assistance!
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">SD</div>
-                <div>
-                  <div className="author-name">Samyukta Dawadi</div>
-                  <div className="author-company">UWS Nepal</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-card">
-              <div className="quote-mark">"</div>
-              <p className="testimonial-text">
-                The work that Aman Mishra made on my WordPress website was superb. They were punctual, professional, and responsive. The user-friendly design has greatly increased the traffic to my website. I heartily endorse their services!
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">AP</div>
-                <div>
-                  <div className="author-name">Arsheena Piya</div>
-                  <div className="author-company">Piya Plastics</div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

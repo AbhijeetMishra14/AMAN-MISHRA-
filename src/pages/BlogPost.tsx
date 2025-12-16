@@ -174,7 +174,12 @@ const BlogPost = () => {
             </div>
             {blog.images && blog.images.length > 0 && (
               <div className="blog-featured-image">
-                <img src={blog.images[0]} alt={blog.title} />
+                <img 
+                  src={blog.images[0]} 
+                  alt={blog.title}
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
               </div>
             )}
 

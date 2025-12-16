@@ -15,6 +15,8 @@ interface TableOfContentsItem {
 const BlogEditor: React.FC = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [category, setCategory] = useState<string>('Uncategorized');
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
@@ -242,6 +244,8 @@ const BlogEditor: React.FC = () => {
         const blog = await adminService.getBlogById(id);
         setTitle(blog.title);
         setSummary(blog.summary);
+        setMetaTitle(blog.metaTitle || '');
+        setMetaDescription(blog.metaDescription || '');
         setCategory(blog.category || 'Uncategorized');
         setStatus(blog.status);
         setImages(blog.images || []);
@@ -283,6 +287,8 @@ const BlogEditor: React.FC = () => {
       const blogData = {
         title: title.trim(),
         summary: summary.trim(),
+        metaTitle: metaTitle.trim(),
+        metaDescription: metaDescription.trim(),
         content: editor.getHTML(),
         images,
         category,
@@ -348,6 +354,28 @@ const BlogEditor: React.FC = () => {
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Brief summary for blog list"
+              className="textarea-summary"
+              rows={3}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Meta Title (for SEO)</label>
+            <input
+              type="text"
+              value={metaTitle}
+              onChange={(e) => setMetaTitle(e.target.value)}
+              placeholder="Meta title for SEO"
+              className="input-large"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Meta Description (for SEO)</label>
+            <textarea
+              value={metaDescription}
+              onChange={(e) => setMetaDescription(e.target.value)}
+              placeholder="Meta description for SEO"
               className="textarea-summary"
               rows={3}
             />

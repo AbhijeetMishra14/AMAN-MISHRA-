@@ -17,6 +17,7 @@ import ClientLogo12 from '../assets/Client-Track/12.jpg';
 import ClientLogo13 from '../assets/Client-Track/13.jpg';
 import ClientLogo14 from '../assets/Client-Track/14.jpg';
 import ClientLogo15 from '../assets/Client-Track/15.jpg';
+import AdminSidebar from '../components/AdminSidebar';
 
 interface ClientLogo {
   _id: string;
@@ -155,57 +156,28 @@ const AdminClients: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <ClientLogoModal
-        isOpen={isModalOpen}
-        onClose={resetModal}
-        onSubmit={handleModalSubmit}
-        initialData={editingClient || undefined}
-        isUploading={uploading}
-        onUpload={handleUpload}
-      />
-
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1>⚙️ Admin Panel</h1>
-          <p>Manage trusted client logos shown on the homepage.</p>
-        </div>
-        <button onClick={handleLogout} className="btn-logout">
-          Logout
-        </button>
-      </header>
-
-      <div className="dashboard-layout">
-        <aside className="dashboard-sidebar">
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/dashboard')}
-          >
-            📝 Blog Posts
+      <AdminSidebar />
+      
+      <div className="admin-dashboard-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>🤝 Trusted Clients</h1>
+            <p>Manage client logos displayed on homepage</p>
+          </div>
+          <button onClick={handleLogout} className="btn-logout">
+            Logout
           </button>
-          <button
-            type="button"
-            className="sidebar-link sidebar-link-active"
-          >
-            🤝 Trusted Clients
-          </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/pricing')}
-          >
-            💰 Pricing
-          </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/faq')}
-          >
-            ❓ FAQs
-          </button>
-        </aside>
+        </header>
 
         <div className="dashboard-main">
+          <ClientLogoModal
+            isOpen={isModalOpen}
+            onClose={resetModal}
+            onSubmit={handleModalSubmit}
+            initialData={editingClient || undefined}
+            isUploading={uploading}
+            onUpload={handleUpload}
+          />
           <div className="section-header">
             <h2>Our Trusted Clients Logos ({clients.length})</h2>
           </div>
@@ -359,4 +331,3 @@ const AdminClients: React.FC = () => {
 };
 
 export default AdminClients;
-

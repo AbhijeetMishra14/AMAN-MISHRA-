@@ -1,5 +1,62 @@
 import axios from 'axios';
 
+interface Blog {
+  title: string;
+  content: string;
+  author?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
+interface Pricing {
+  planName: string;
+  price: number;
+  features: string[];
+}
+
+interface Job {
+  title: string;
+  description: string;
+  location: string;
+}
+
+interface FAQ {
+  _id?: string;
+  question: string;
+  answer: string;
+  page: string;
+  order?: number;
+  active?: boolean;
+}
+
+interface Section {
+  title: string;
+  content: string;
+  page: string;
+}
+
+interface Testimonial {
+  text: string;
+  authorName: string;
+  authorCompany: string;
+  authorAvatar?: string;
+  page: string;
+  order?: number;
+  active?: boolean;
+  rating?: number;
+}
+
+interface Portfolio {
+  _id?: string;
+  title: string;
+  description?: string;
+  page: string;
+  imageUrl?: string;
+  websiteUrl?: string;
+  order?: number;
+  active?: boolean;
+}
+
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const adminAPI = axios.create({
@@ -36,12 +93,12 @@ export const adminService = {
   },
 
   // Blogs
-  createBlog: async (data: any) => {
+  createBlog: async (data: Blog) => {
     const res = await adminAPI.post('/blogs', data);
     return res.data;
   },
 
-  updateBlog: async (id: string, data: any) => {
+  updateBlog: async (id: string, data: Partial<Blog>) => {
     const res = await adminAPI.put(`/blogs/${id}`, data);
     return res.data;
   },
@@ -96,12 +153,12 @@ export const adminService = {
     return res.data;
   },
 
-  createPricing: async (data: any) => {
+  createPricing: async (data: Pricing) => {
     const res = await adminAPI.post('/pricing', data);
     return res.data;
   },
 
-  updatePricing: async (id: string, data: any) => {
+  updatePricing: async (id: string, data: Partial<Pricing>) => {
     const res = await adminAPI.put(`/pricing/${id}`, data);
     return res.data;
   },
@@ -117,12 +174,12 @@ export const adminService = {
     return res.data;
   },
 
-  createJob: async (data: any) => {
+  createJob: async (data: Job) => {
     const res = await adminAPI.post('/jobs', data);
     return res.data;
   },
 
-  updateJob: async (id: string, data: any) => {
+  updateJob: async (id: string, data: Partial<Job>) => {
     const res = await adminAPI.put(`/jobs/${id}`, data);
     return res.data;
   },
@@ -140,7 +197,7 @@ export const adminService = {
 
   listAllFAQs: async () => {
     const res = await adminAPI.get('/faq/admin/all');
-    return res.data;
+    return { faqs: res.data };
   },
 
   // Get FAQs for a specific page (public)
@@ -155,12 +212,12 @@ export const adminService = {
     return res.data;
   },
 
-  createFAQ: async (data: any) => {
+  createFAQ: async (data: FAQ) => {
     const res = await adminAPI.post('/faq', data);
     return res.data;
   },
 
-  updateFAQ: async (id: string, data: any) => {
+  updateFAQ: async (id: string, data: Partial<FAQ>) => {
     const res = await adminAPI.put(`/faq/${id}`, data);
     return res.data;
   },
@@ -181,12 +238,12 @@ export const adminService = {
     return res.data;
   },
 
-  createSection: async (data: any) => {
+  createSection: async (data: Section) => {
     const res = await adminAPI.post('/sections', data);
     return res.data;
   },
 
-  updateSection: async (id: string, data: any) => {
+  updateSection: async (id: string, data: Partial<Section>) => {
     const res = await adminAPI.put(`/sections/${id}`, data);
     return res.data;
   },
@@ -196,7 +253,7 @@ export const adminService = {
     return res.data;
   },
 
-  reorderSections: async (sections: any[]) => {
+  reorderSections: async (sections: Partial<Section[]>) => {
     const res = await adminAPI.put('/sections/reorder/all', { sections });
     return res.data;
   },
@@ -213,6 +270,73 @@ export const adminService = {
 
   revertSectionVersion: async (id: string, version: number) => {
     const res = await adminAPI.post(`/sections/${id}/revert/${version}`);
+    return res.data;
+  },
+
+  // Testimonials
+  listTestimonials: async () => {
+    const res = await adminAPI.get('/testimonials/admin/all');
+    return res.data;
+  },
+
+  getTestimonialsByPage: async (page: string) => {
+    const res = await adminAPI.get(`/testimonials/admin/page/${page}`);
+    return res.data;
+  },
+
+  createTestimonial: async (data: Testimonial) => {
+    const res = await adminAPI.post('/testimonials', data);
+    return res.data;
+  },
+
+  updateTestimonial: async (id: string, data: Partial<Testimonial>) => {
+    const res = await adminAPI.put(`/testimonials/${id}`, data);
+    return res.data;
+  },
+
+  deleteTestimonial: async (id: string) => {
+    const res = await adminAPI.delete(`/testimonials/${id}`);
+    return res.data;
+  },
+
+  toggleTestimonialVisibility: async (id: string) => {
+    const res = await adminAPI.patch(`/testimonials/${id}/toggle`);
+    return res.data;
+  },
+
+  reorderTestimonials: async (testimonials: Partial<Testimonial[]>) => {
+    const res = await adminAPI.put('/testimonials/reorder/all', { testimonials });
+    return res.data;
+  },
+
+  // Portfolio
+  listAllPortfolios: async () => {
+    const res = await adminAPI.get('/portfolio/admin/all');
+    return { portfolios: res.data };
+  },
+
+  getPortfoliosByPage: async (page: string) => {
+    const res = await adminAPI.get(`/portfolio/page/${page}`);
+    return res.data;
+  },
+
+  getPortfoliosByPageAdmin: async (page: string) => {
+    const res = await adminAPI.get(`/portfolio/admin/page/${page}`);
+    return res.data;
+  },
+
+  createPortfolio: async (data: Portfolio) => {
+    const res = await adminAPI.post('/portfolio', data);
+    return res.data;
+  },
+
+  updatePortfolio: async (id: string, data: Partial<Portfolio>) => {
+    const res = await adminAPI.put(`/portfolio/${id}`, data);
+    return res.data;
+  },
+
+  deletePortfolio: async (id: string) => {
+    const res = await adminAPI.delete(`/portfolio/${id}`);
     return res.data;
   },
 };

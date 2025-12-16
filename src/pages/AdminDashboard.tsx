@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
 import './styles/AdminDashboard.css';
+import AdminSidebar from '../components/AdminSidebar';
 
 interface Blog {
   _id: string;
@@ -17,7 +18,7 @@ interface Blog {
 const AdminDashboard: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [admin, setAdmin] = useState<any>(null);
+  const [admin, setAdmin] = useState<{ name?: string; email?: string } | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ const AdminDashboard: React.FC = () => {
     if (user) setAdmin(JSON.parse(user));
 
     loadBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadBlogs = async () => {
@@ -39,7 +41,7 @@ const AdminDashboard: React.FC = () => {
       setLoading(true);
       const items = await adminService.listBlogs();
       setBlogs(items);
-    } catch (err) {
+    } catch (err: Error | unknown) {
       console.error('Failed to load blogs:', err);
     } finally {
       setLoading(false);
@@ -51,7 +53,7 @@ const AdminDashboard: React.FC = () => {
     try {
       await adminService.deleteBlog(id);
       setBlogs(blogs.filter((b) => b._id !== id));
-    } catch (err) {
+    } catch {
       alert('Delete failed');
     }
   };
@@ -79,53 +81,18 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1>📊 Admin Dashboard</h1>
-          <p>Welcome, {admin?.name || admin?.email}</p>
-        </div>
-        <button onClick={handleLogout} className="btn-logout">
-          Logout
-        </button>
-      </header>
-
-      <div className="dashboard-layout">
-        <aside className="dashboard-sidebar">
-          <button
-            type="button"
-            className="sidebar-link sidebar-link-active"
-          >
-            📝 Blog Posts
+      <AdminSidebar />
+      
+      <div className="admin-dashboard-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>� Admin Blog</h1>
+            <p>Welcome, {admin?.name || admin?.email || 'Admin'}</p>
+          </div>
+          <button onClick={handleLogout} className="btn-logout">
+            Logout
           </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/clients')}
-          >
-            🤝 Trusted Clients
-          </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/pricing')}
-          >
-            💰 Pricing
-          </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/careers')}
-          >
-            💼 Careers
-          </button>
-          <button
-            type="button"
-            className="sidebar-link"
-            onClick={() => navigate('/admin/faq')}
-          >
-            ❓ FAQs
-          </button>
-        </aside>
+        </header>
 
         <div className="dashboard-main">
           <div className="section-header">

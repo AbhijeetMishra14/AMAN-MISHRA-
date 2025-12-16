@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
 import PricingModal from '../components/PricingModal';
+import AdminSidebar from '../components/AdminSidebar';
 import './styles/AdminDashboard.css';
 
 type PricingPlan = {
@@ -319,6 +320,8 @@ const AdminPricing: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
+      <AdminSidebar />
+      
       <PricingModal
         isOpen={isModalOpen}
         onClose={resetForm}
@@ -328,31 +331,16 @@ const AdminPricing: React.FC = () => {
         totalPlans={plans.length}
       />
 
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1>💰 Pricing Management</h1>
-          <p>Manage pricing plans displayed on the Pricing page.</p>
-        </div>
-        <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
-          Logout
-        </button>
-      </header>
-
-      <div className="dashboard-layout">
-        <aside className="dashboard-sidebar">
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/dashboard')}>
-            📝 Blog Posts
+      <div className="admin-pricing-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>💰 Pricing Management</h1>
+            <p>Manage pricing plans displayed on the Pricing page.</p>
+          </div>
+          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
+            Logout
           </button>
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/clients')}>
-            🤝 Trusted Clients
-          </button>
-          <button type="button" className="sidebar-link sidebar-link-active">
-            💰 Pricing
-          </button>
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/faq')}>
-            ❓ FAQs
-          </button>
-        </aside>
+        </header>
 
         <div className="dashboard-main">
           <div className="section-header">

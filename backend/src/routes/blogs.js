@@ -54,7 +54,7 @@ router.post('/upload', requireAuth, upload.single('image'), (req, res) => {
 // Create blog
 router.post('/', requireAuth, async (req, res) => {
   try {
-    const { title, content, summary, images, category, status, tableOfContents } = req.body;
+    const { title, content, summary, images, category, status, tableOfContents, metaTitle, metaDescription } = req.body;
     const slug = slugify(title || Date.now().toString(), { lower: true, strict: true });
     const blog = new Blog({ 
       title, 
@@ -64,7 +64,9 @@ router.post('/', requireAuth, async (req, res) => {
       images: images || [], 
       category: category || 'Uncategorized',
       status: status || 'draft',
-      tableOfContents: tableOfContents || []
+      tableOfContents: tableOfContents || [],
+      metaTitle,
+      metaDescription
     });
     await blog.save();
     res.json(blog);
@@ -74,7 +76,18 @@ router.post('/', requireAuth, async (req, res) => {
 // Update blog
 router.put('/:id', requireAuth, async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { title, content, summary, images, category, status, tableOfContents, metaTitle, metaDescription } = req.body;
+    const blog = await Blog.findByIdAndUpdate(req.params.id, {
+      title,
+      content,
+      summary,
+      images,
+      category,
+      status,
+      tableOfContents,
+      metaTitle,
+      metaDescription
+    }, { new: true });
     if (!blog) return res.status(404).json({ error: 'Not found' });
     res.json(blog);
   } catch (e) { res.status(500).json({ error: e.message }); }

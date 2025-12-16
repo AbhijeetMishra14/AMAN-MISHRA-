@@ -109,23 +109,32 @@ const Home = () => {
 
     const fetchHomepageContent = async () => {
       try {
-        const content = await adminService.getHomepageSections();
-        if (content.hero) {
-          setHeroTitle(content.hero.title || heroTitle);
-          setHeroSubtitle(content.hero.subtitle || heroSubtitle);
-          setHeroButtonText(content.hero.buttonText || heroButtonText);
-          setHeroButtonLink(content.hero.buttonLink || heroButtonLink);
+        const sections = await adminService.listSections();
+        const sectionArray = Array.isArray(sections) ? sections : sections.sections || [];
+        
+        type Section = { type: string; title?: string; subtitle?: string; buttonText?: string; buttonLink?: string };
+        
+        const heroSection = sectionArray.find((s: Section) => s.type === 'hero');
+        if (heroSection) {
+          setHeroTitle(heroSection.title || heroTitle);
+          setHeroSubtitle(heroSection.subtitle || heroSubtitle);
+          setHeroButtonText(heroSection.buttonText || heroButtonText);
+          setHeroButtonLink(heroSection.buttonLink || heroButtonLink);
         }
-        if (content.about) {
-          setAboutTitle(content.about.title || aboutTitle);
-          setAboutSubtitle(content.about.subtitle || aboutSubtitle);
-          setAboutButtonText(content.about.buttonText || aboutButtonText);
-          setAboutButtonLink(content.about.buttonLink || aboutButtonLink);
+        
+        const aboutSection = sectionArray.find((s: Section) => s.type === 'about');
+        if (aboutSection) {
+          setAboutTitle(aboutSection.title || aboutTitle);
+          setAboutSubtitle(aboutSection.subtitle || aboutSubtitle);
+          setAboutButtonText(aboutSection.buttonText || aboutButtonText);
+          setAboutButtonLink(aboutSection.buttonLink || aboutButtonLink);
         }
-        if (content.cta) {
-          setCtaTitle(content.cta.title || ctaTitle);
-          setCtaSubtitle(content.cta.subtitle || ctaSubtitle);
-          setCtaButtonText(content.cta.buttonText || ctaButtonText);
+        
+        const ctaSection = sectionArray.find((s: Section) => s.type === 'cta');
+        if (ctaSection) {
+          setCtaTitle(ctaSection.title || ctaTitle);
+          setCtaSubtitle(ctaSection.subtitle || ctaSubtitle);
+          setCtaButtonText(ctaSection.buttonText || ctaButtonText);
         }
       } catch (error) {
         console.error('Failed to fetch homepage content:', error);
@@ -154,6 +163,7 @@ const Home = () => {
     fetchClients();
     fetchHomepageContent();
     fetchFAQs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -175,7 +185,7 @@ const Home = () => {
             fpsLimit: 60,
             particles: {
               number: {
-                value: 80,
+                value: 40,
                 density: {
                   enable: false,
                 },
@@ -187,14 +197,14 @@ const Home = () => {
                 type: 'circle',
               },
               opacity: {
-                value: 0.6,
+                value: 0.5,
               },
               size: {
-                value: { min: 2, max: 4 },
+                value: { min: 1.5, max: 3 },
               },
               move: {
                 enable: true,
-                speed: 0.5,
+                speed: 0.3,
                 direction: 'none',
                 outModes: {
                   default: 'bounce',
@@ -228,10 +238,10 @@ const Home = () => {
             },
             links: {
               enable: true,
-              distance: 180,
+              distance: 150,
               color: '#ffffff',
-              opacity: 0.5,
-              width: 1.5,
+              opacity: 0.4,
+              width: 1,
             },
           }}
           className="hero-particles"
@@ -245,9 +255,11 @@ const Home = () => {
               <p className="hero-subtitle">
                 {heroSubtitle}
               </p>
-              <Link to={heroButtonLink} className="btn btn-hero">
-                {heroButtonText}
-              </Link>
+              <div className="hero-button-group">
+                <Link to={heroButtonLink} className="btn btn-hero">
+                  {heroButtonText}
+                </Link>
+              </div>
               {/* Elfsight Google Reviews | Untitled Google Reviews */}
               <div className="hero-badges">
                 <div
@@ -482,7 +494,13 @@ const Home = () => {
                 <Link key={post._id} to={`/blogs/${post.slug}`} className="blog-card">
                   <div className="blog-image">
                     {post.images && post.images[0] ? (
-                      <img src={post.images[0]} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img 
+                        src={post.images[0]} 
+                        alt={post.title} 
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                      />
                     ) : (
                       <div className="blog-placeholder">Blog Image</div>
                     )}

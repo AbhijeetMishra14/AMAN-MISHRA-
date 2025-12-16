@@ -122,6 +122,7 @@ const Header = () => {
               </span>
               <div className={`dropdown-menu ${isResourcesOpen ? 'show' : ''}`}>
                 <Link to="/pricing" className="dropdown-item" onClick={closeMenu}>Pricing</Link>
+                <Link to="/faq" className="dropdown-item" onClick={closeMenu}>FAQ</Link>
               </div>
             </div>
 

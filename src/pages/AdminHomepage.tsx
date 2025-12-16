@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
+import AdminSidebar from '../components/AdminSidebar';
+import './styles/AdminDashboard.css';
 import './styles/AdminHomepage.css';
 
 interface Section {
@@ -65,10 +67,16 @@ const AdminHomepage: React.FC = () => {
       setError('');
       setSuccess('');
 
+      const sectionData = {
+        title: formData.title || '',
+        content: formData.description || '',
+        page: formData.type || 'home',
+      };
+
       if (formData._id) {
-        await adminService.updateSection(formData._id, formData);
+        await adminService.updateSection(formData._id, sectionData);
       } else {
-        await adminService.createSection(formData);
+        await adminService.createSection(sectionData);
       }
 
       await loadSections();
@@ -257,33 +265,42 @@ const AdminHomepage: React.FC = () => {
   };
 
   return (
-    <div className="admin-homepage">
-      <header className="admin-header">
-        <h1>🏠 Homepage</h1>
-        <div className="header-actions">
-          {lastSaved && <span className="last-saved">Last saved: {lastSaved.toLocaleTimeString()}</span>}
-        </div>
-      </header>
+    <div className="admin-dashboard">
+      <AdminSidebar />
+      
+      <div className="admin-dashboard-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>🏠 Homepage Sections</h1>
+            <p>Manage homepage content and sections</p>
+          </div>
+          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
+            Logout
+          </button>
+        </header>
 
-      {error && <div className="alert alert-error">{error}</div>}
-      {success && <div className="alert alert-success">{success}</div>}
+        {error && <div className="alert alert-error">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
 
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : (
-        <div className="homepage-layout">
-          <div className="preview-container">{renderPreview()}</div>
+        {loading ? (
+          <div className="loading">Loading...</div>
+        ) : (
+          <div className="dashboard-main">
+            <div className="homepage-layout">
+              <div className="preview-container">{renderPreview()}</div>
 
-          {showSidebar && (
-            <aside className="edit-sidebar">
-              <button className="close-sidebar" onClick={() => setShowSidebar(false)}>
-                ×
-              </button>
-              {renderEditForm()}
-            </aside>
-          )}
-        </div>
-      )}
+              {showSidebar && (
+                <aside className="edit-sidebar">
+                  <button className="close-sidebar" onClick={() => setShowSidebar(false)}>
+                    ×
+                  </button>
+                  {renderEditForm()}
+                </aside>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

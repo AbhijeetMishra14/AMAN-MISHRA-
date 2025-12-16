@@ -49,23 +49,28 @@ const PricingModal: React.FC<PricingModalProps> = ({
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (initialData) {
-      setForm({
-        ...initialData,
-        order: initialData.order ?? totalPlans,
-        interval: initialData.interval || 'Monthly',
-        features: initialData.features || [],
-      });
-    } else {
-      setForm({ ...emptyPlan, order: totalPlans });
+    if (isOpen) {
+      const initializeForm = () => {
+        if (initialData) {
+          setForm({
+            ...initialData,
+            order: initialData.order ?? totalPlans,
+            interval: initialData.interval || 'Monthly',
+            features: initialData.features || [],
+          });
+        } else {
+          setForm({ ...emptyPlan, order: totalPlans });
+        }
+        setError('');
+        setNewFeature('');
+      };
+      initializeForm();
     }
-    setError('');
-    setNewFeature('');
   }, [isOpen, initialData, totalPlans]);
 
   if (!isOpen) return null;
 
-  const handleChange = (field: keyof PricingPlan, value: any) => {
+  const handleChange = (field: keyof PricingPlan, value: string | number | boolean | string[]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 

@@ -1,0 +1,44 @@
+.admin-blogs {
+  padding: 2rem;
+}
+
+.admin-blogs h2 {
+  margin-bottom: 1rem;
+}
+
+.admin-blogs .btn-primary {
+  margin-bottom: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table th,
+.table td {
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.table .btn {
+  margin-right: 0.5rem;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}

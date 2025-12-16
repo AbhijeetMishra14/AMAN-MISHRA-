@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
 import './styles/AdminDashboard.css';
+import AdminSidebar from '../components/AdminSidebar';
 
 interface Job {
   _id: string;
@@ -115,34 +116,18 @@ const AdminCareer: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1>👨‍💻 Careers Management</h1>
-          <p>Manage open positions displayed on the Careers page.</p>
-        </div>
-        <button onClick={handleLogout} className="btn-logout">
-          Logout
-        </button>
-      </header>
-
-      <div className="dashboard-layout">
-        <aside className="dashboard-sidebar">
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/dashboard')}>
-            📝 Blog Posts
+      <AdminSidebar />
+      
+      <div className="admin-dashboard-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>💼 Careers</h1>
+            <p>Manage open positions and job listings</p>
+          </div>
+          <button onClick={handleLogout} className="btn-logout">
+            Logout
           </button>
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/clients')}>
-            🤝 Trusted Clients
-          </button>
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/pricing')}>
-            💰 Pricing
-          </button>
-          <button type="button" className="sidebar-link sidebar-link-active">
-            👨‍💻 Careers
-          </button>
-          <button type="button" className="sidebar-link" onClick={() => navigate('/admin/faq')}>
-            ❓ FAQs
-          </button>
-        </aside>
+        </header>
 
         <div className="dashboard-main">
           <div className="section-header">

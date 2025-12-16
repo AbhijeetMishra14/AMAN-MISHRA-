@@ -1,5 +1,10 @@
 import React from 'react';
 
+interface Feature {
+  title: string;
+  description: string;
+}
+
 interface Section {
   _id: string;
   type: string;
@@ -8,7 +13,7 @@ interface Section {
   description?: string;
   order: number;
   visible: boolean;
-  features?: any[];
+  features?: Feature[];
   buttonText?: string;
   buttonLink?: string;
 }

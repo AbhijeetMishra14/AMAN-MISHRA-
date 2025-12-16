@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
+import AdminSidebar from '../components/AdminSidebar';
 import HomepagePreview from '../components/HomepagePreview';
+import './styles/AdminDashboard.css';
 import './styles/AdminHomepageNew.css';
 import '../components/HomepagePreview.css';
+
+interface Feature {
+  title: string;
+  description: string;
+}
 
 interface Section {
   _id: string;
@@ -14,8 +21,7 @@ interface Section {
   order: number;
   visible: boolean;
   version?: number;
-  features?: any[];
-  testimonials?: any[];
+  features?: Feature[];
   buttonText?: string;
   buttonLink?: string;
 }
@@ -28,7 +34,6 @@ const AdminHomepageNew: React.FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Form state
@@ -40,7 +45,7 @@ const AdminHomepageNew: React.FC = () => {
     buttonText: '',
     buttonLink: '',
     visible: true,
-    features: [] as any[],
+    features: [] as Feature[],
   });
 
   useEffect(() => {
@@ -58,7 +63,7 @@ const AdminHomepageNew: React.FC = () => {
       const data = await adminService.listSections();
       setSections(Array.isArray(data) ? data : []);
       setError('');
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error('Error fetching sections:', err);
       setError('Failed to load sections');
     } finally {
@@ -98,16 +103,22 @@ const AdminHomepageNew: React.FC = () => {
 
   const handleSaveSection = async () => {
     try {
+      const sectionData = {
+        title: formData.title || '',
+        content: formData.description || '',
+        page: formData.type || 'home',
+      };
+
       if (editingId) {
-        await adminService.updateSection(editingId, formData);
+        await adminService.updateSection(editingId, sectionData);
       } else {
-        await adminService.createSection(formData);
+        await adminService.createSection(sectionData);
       }
       fetchSections();
       setShowSidebar(false);
       setLastSaved(new Date());
       setError('');
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error('Error saving section:', err);
       setError('Failed to save section');
     }
@@ -119,7 +130,7 @@ const AdminHomepageNew: React.FC = () => {
         await adminService.deleteSection(id);
         fetchSections();
         setLastSaved(new Date());
-      } catch (err: any) {
+      } catch (err: Error | unknown) {
         console.error('Error deleting section:', err);
         setError('Failed to delete section');
       }
@@ -131,7 +142,7 @@ const AdminHomepageNew: React.FC = () => {
       await adminService.toggleSectionVisibility(id);
       fetchSections();
       setLastSaved(new Date());
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error('Error toggling visibility:', err);
       setError('Failed to toggle visibility');
     }
@@ -158,11 +169,11 @@ const AdminHomepageNew: React.FC = () => {
 
     try {
       await adminService.reorderSections(
-        newSections.map((s, idx) => ({ id: s._id, order: idx }))
+        newSections.map((s) => ({ id: s._id || '', order: s.order || 0 }))
       );
       setLastSaved(new Date());
       setDraggedItem(null);
-    } catch (err) {
+    } catch (err: Error | unknown) {
       console.error('Error reordering:', err);
       fetchSections();
     }
@@ -237,27 +248,29 @@ const AdminHomepageNew: React.FC = () => {
   };
 
   return (
-    <div className="admin-homepage-new">
-      <header className="admin-header">
-        <h1>🏠 Homepage Builder</h1>
-        <div className="header-actions">
-          {lastSaved && (
-            <span className="last-saved">Last saved: {lastSaved.toLocaleTimeString()}</span>
-          )}
-          <button className="btn-add-section" onClick={handleAddSection}>
-            + Add Section
-          </button>
-        </div>
-      </header>
-
-      <div className="homepage-builder-layout">
-        <aside className={`builder-sidebar ${showSidebar ? 'open' : ''}`}>
-          <div className="sidebar-header">
-            <h3>{editingId ? 'Edit Section' : 'New Section'}</h3>
-            <button className="close-btn" onClick={() => setShowSidebar(false)}>×</button>
+    <div className="admin-dashboard">
+      <AdminSidebar />
+      
+      <div className="admin-dashboard-content">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1>🏠 Homepage Builder</h1>
+            <p>Create and manage homepage sections</p>
           </div>
+          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
+            Logout
+          </button>
+        </header>
 
-          <div className="sidebar-content">
+        <div className="dashboard-main">
+          <div className="homepage-builder-layout">
+            <aside className={`builder-sidebar ${showSidebar ? 'open' : ''}`}>
+              <div className="sidebar-header">
+                <h3>{editingId ? 'Edit Section' : 'New Section'}</h3>
+                <button className="close-btn" onClick={() => setShowSidebar(false)}>×</button>
+              </div>
+
+              <div className="sidebar-content">
             <div className="form-group">
               <label>Section Type *</label>
               <select
@@ -366,7 +379,11 @@ const AdminHomepageNew: React.FC = () => {
             <div className="sections-preview">
               <div className="preview-header">
                 <h2>Homepage Sections ({sections.filter(s => s.visible).length}/{sections.length})</h2>
-                <p>Click on any section to edit. Drag to reorder.</p>
+                <div className="section-header-actions">
+                  <button className="btn-new-blog" onClick={handleAddSection}>
+                    + Add Section
+                  </button>
+                </div>
               </div>
 
               <div className="sections-grid">
@@ -381,6 +398,8 @@ const AdminHomepageNew: React.FC = () => {
         </main>
 
         <HomepagePreview sections={sections} />
+          </div>
+        </div>
       </div>
     </div>
   );

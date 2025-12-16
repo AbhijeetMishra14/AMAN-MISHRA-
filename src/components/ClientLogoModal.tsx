@@ -33,17 +33,22 @@ const ClientLogoModal: React.FC<ClientLogoModalProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (initialData) {
-      setName(initialData.name);
-      setWebsite(initialData.website || '');
-      setImageUrl(initialData.imageUrl);
-    } else {
-      setName('');
-      setWebsite('');
-      setImageUrl('');
-      setManualImageUrl('');
+    if (isOpen) {
+      const resetModal = () => {
+        if (initialData) {
+          setName(initialData.name);
+          setWebsite(initialData.website || '');
+          setImageUrl(initialData.imageUrl);
+        } else {
+          setName('');
+          setWebsite('');
+          setImageUrl('');
+          setManualImageUrl('');
+        }
+        setError('');
+      };
+      resetModal();
     }
-    setError('');
   }, [isOpen, initialData]);
 
   if (!isOpen) return null;

@@ -45,10 +45,19 @@ type PageFAQ = {
   answer: string;
 };
 
+type PagePortfolio = {
+  _id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  websiteUrl: string;
+};
+
 const SEOService = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(0);
   const [faqs, setFaqs] = useState<PageFAQ[]>([]);
+  const [portfolios, setPortfolios] = useState<PagePortfolio[]>([]);
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -62,7 +71,21 @@ const SEOService = () => {
         console.error('Failed to fetch FAQs:', error);
       }
     };
+    
+    const fetchPortfolios = async () => {
+      try {
+        const data = await adminService.getPortfoliosByPage('seo-service');
+        const portfolioList = Array.isArray(data) ? data : [];
+        if (portfolioList.length > 0) {
+          setPortfolios(portfolioList);
+        }
+      } catch (error) {
+        console.error('Failed to fetch portfolios:', error);
+      }
+    };
+    
     fetchFAQs();
+    fetchPortfolios();
   }, []);
 
   const toggleFAQ = (index: number) => {
@@ -502,35 +525,59 @@ const SEOService = () => {
           </p>
 
           <div className="portfolio-grid-seo">
-            <div className="portfolio-item-seo">
-              <div className="portfolio-image-seo">
-                <div className="portfolio-placeholder-seo">Seed Financial Academy</div>
-              </div>
-              <h3>Seed Financial Academy</h3>
-              <a href="https://makuracreations.com/portfolio/seed-financial-academy/" target="_blank" rel="noopener noreferrer" className="view-site">
-                View Site →
-              </a>
-            </div>
+            {portfolios.length > 0 ? (
+              portfolios.map((portfolio) => (
+                <div key={portfolio._id} className="portfolio-item-seo">
+                  <div className="portfolio-image-seo">
+                    {portfolio.imageUrl ? (
+                      <img src={portfolio.imageUrl} alt={portfolio.title} />
+                    ) : (
+                      <div className="portfolio-placeholder-seo">{portfolio.title}</div>
+                    )}
+                  </div>
+                  <h3>{portfolio.title}</h3>
+                  {portfolio.description && <p className="portfolio-description">{portfolio.description}</p>}
+                  {portfolio.websiteUrl && (
+                    <a href={portfolio.websiteUrl} target="_blank" rel="noopener noreferrer" className="view-site">
+                      View Site →
+                    </a>
+                  )}
+                </div>
+              ))
+            ) : (
+              // Fallback portfolio items
+              <>
+                <div className="portfolio-item-seo">
+                  <div className="portfolio-image-seo">
+                    <div className="portfolio-placeholder-seo">Seed Financial Academy</div>
+                  </div>
+                  <h3>Seed Financial Academy</h3>
+                  <a href="https://makuracreations.com/portfolio/seed-financial-academy/" target="_blank" rel="noopener noreferrer" className="view-site">
+                    View Site →
+                  </a>
+                </div>
 
-            <div className="portfolio-item-seo">
-              <div className="portfolio-image-seo">
-                <div className="portfolio-placeholder-seo">Nepal Travel Adventure</div>
-              </div>
-              <h3>Nepal Travel Adventure</h3>
-              <a href="https://makuracreations.com/portfolio/nepal-travel-adventure/" target="_blank" rel="noopener noreferrer" className="view-site">
-                View Site →
-              </a>
-            </div>
+                <div className="portfolio-item-seo">
+                  <div className="portfolio-image-seo">
+                    <div className="portfolio-placeholder-seo">Nepal Travel Adventure</div>
+                  </div>
+                  <h3>Nepal Travel Adventure</h3>
+                  <a href="https://makuracreations.com/portfolio/nepal-travel-adventure/" target="_blank" rel="noopener noreferrer" className="view-site">
+                    View Site →
+                  </a>
+                </div>
 
-            <div className="portfolio-item-seo">
-              <div className="portfolio-image-seo">
-                <div className="portfolio-placeholder-seo">Varicon</div>
-              </div>
-              <h3>Varicon</h3>
-              <a href="https://makuracreations.com/portfolio/varicon-australia/" target="_blank" rel="noopener noreferrer" className="view-site">
-                View Site →
-              </a>
-            </div>
+                <div className="portfolio-item-seo">
+                  <div className="portfolio-image-seo">
+                    <div className="portfolio-placeholder-seo">Varicon</div>
+                  </div>
+                  <h3>Varicon</h3>
+                  <a href="https://makuracreations.com/portfolio/varicon-australia/" target="_blank" rel="noopener noreferrer" className="view-site">
+                    View Site →
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

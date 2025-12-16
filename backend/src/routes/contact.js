@@ -29,15 +29,14 @@ router.post('/', async (req, res) => {
     // Send WhatsApp notification to owner
     const whatsappResult = await notifyOwner(formData, 'contact');
     
-    // Send confirmation email to user
-    const emailResult = await sendConfirmationEmail(email, 'contact', formData);
+    // Note: Email sending is optional and disabled to avoid SMTP errors
+    // const emailResult = await sendConfirmationEmail(email, 'contact', formData);
 
     res.status(200).json({
       success: true,
       message: 'Contact form submitted successfully',
       data: {
-        whatsapp: whatsappResult,
-        email: emailResult
+        whatsapp: whatsappResult
       }
     });
   } catch (error) {

@@ -19,6 +19,9 @@ import clientRoutes from './routes/clients.js';
 import pricingRoutes from './routes/pricing.js';
 import jobsRoutes from './routes/jobs.js';
 import faqRoutes from './routes/faq.js';
+import pageSectionsRoutes from './routes/pageSections.js';
+import testimonialsRoutes from './routes/testimonials.js';
+import portfolioRoutes from './routes/portfolio.js';
 
 // Load environment variables
 dotenv.config();
@@ -47,6 +50,9 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/pricing', pricingRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/faq', faqRoutes);
+app.use('/api/sections', pageSectionsRoutes);
+app.use('/api/testimonials', testimonialsRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 
 // Routes
 app.use('/api/contact', contactRoutes);

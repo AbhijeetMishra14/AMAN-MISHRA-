@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 interface PrivateRouteProps {
-  element: React.ComponentType<any>;
+  element: React.ComponentType<Record<string, never>>;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Component }) => {

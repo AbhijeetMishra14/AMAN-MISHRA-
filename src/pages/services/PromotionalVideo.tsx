@@ -4,10 +4,87 @@ import './PromotionalVideo.css';
 import { adminService } from '../../services/adminService';
 import StartProjectModal from '../../components/StartProjectModal';
 
+interface FAQ {
+  _id: string;
+  question: string;
+  answer: string;
+  page: string;
+  order: number;
+  active: boolean;
+}
+
+interface Testimonial {
+  _id: string;
+  text: string;
+  authorName: string;
+  authorCompany: string;
+  authorAvatar?: string;
+  page: string;
+  rating: number;
+}
+
 const PromotionalVideo = () => {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
-  const [faqs, setFaqs] = useState<any[]>([]);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const defaultFaqs: FAQ[] = [
+    {
+      _id: '1',
+      question: 'Why use promotional videos?',
+      answer: 'Many companies opt to produce a promotional video instead of using other advertising methods to connect with their audience in a way that text cannot. Video plays a vital role in marketing by capturing the audience\'s attention and demonstrating the value that your company offers to them.',
+      page: 'promotional-video',
+      order: 1,
+      active: true,
+    },
+    {
+      _id: '2',
+      question: 'Is a promotional video an advertisement?',
+      answer: 'A promotional video can serve as an advertisement, but it goes beyond traditional advertising. It tells your brand story, showcases your products or services, and creates a personal connection with viewers through compelling narratives and visual storytelling.',
+      page: 'promotional-video',
+      order: 2,
+      active: true,
+    },
+    {
+      _id: '3',
+      question: 'What is the impact of a promotional video?',
+      answer: 'Promotional videos can significantly increase brand awareness, engagement, and conversion rates. They help communicate your message more effectively, build trust with your audience, and can lead to new leads and customers through increased visibility and emotional connection.',
+      page: 'promotional-video',
+      order: 3,
+      active: true,
+    },
+  ];
+
+  const defaultTestimonials: Testimonial[] = [
+    {
+      _id: '1',
+      text: 'Not only does Makura Creations have a good script writer and videographer, their post production editing is also top-notch. The editors gladly accepted any changes we had and provided the updated video swiftly. The pacing, audio, color selection are all perfect for each respective video delivery and visual presentation are something',
+      authorName: 'Hello Topik',
+      authorCompany: 'Hello Topik',
+      authorAvatar: '👥',
+      page: 'promotional-video',
+      rating: 5,
+    },
+    {
+      _id: '2',
+      text: 'The best way to engage an audience is with promotional videos and no one does it better than Makura Creations. My business needed a bit of storytelling to bring in more clients and the team at Makura Creations were just perfect for the job. The video led to new leads and brought in more customers. They subtly showcased my products wit',
+      authorName: 'Seed Finance',
+      authorCompany: 'Seed Finance',
+      authorAvatar: '👥',
+      page: 'promotional-video',
+      rating: 5,
+    },
+    {
+      _id: '3',
+      text: 'Edupro needed a professional promotional video to showcase our online learning platform. Makura Creations delivered beyond expectations. The entire process from concept to final delivery was seamless and professional.',
+      authorName: 'Edupro',
+      authorCompany: 'Edupro',
+      authorAvatar: '👥',
+      page: 'promotional-video',
+      rating: 5,
+    },
+  ];
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -16,12 +93,33 @@ const PromotionalVideo = () => {
         const faqList = Array.isArray(data) ? data : (data?.faqs || []);
         if (faqList.length > 0) {
           setFaqs(faqList);
+        } else {
+          setFaqs(defaultFaqs);
         }
       } catch (error) {
         console.error('Failed to fetch FAQs:', error);
+        setFaqs(defaultFaqs);
       }
     };
+
+    const fetchTestimonials = async () => {
+      try {
+        const data = await adminService.getTestimonialsByPage('promotional-video');
+        const testList = Array.isArray(data) ? data : (data?.testimonials || []);
+        if (testList.length > 0) {
+          setTestimonials(testList);
+        } else {
+          setTestimonials(defaultTestimonials);
+        }
+      } catch (error) {
+        console.error('Failed to fetch testimonials:', error);
+        setTestimonials(defaultTestimonials);
+      }
+    };
+
     fetchFAQs();
+    fetchTestimonials();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stages = [
@@ -77,41 +175,6 @@ const PromotionalVideo = () => {
       title: 'Distribution and Promotion',
       description: "The show's not over after the final cut! We'll take your polished video and distribute it across the web, maximizing its impact. This includes sharing it on popular platforms, optimizing it for search engines, and even leveraging targeted advertising to reach specific demographics. We can also explore influencer partnerships to further amplify your reach.",
       icon: '📢',
-    },
-  ];
-
-  const defaultFaqs = [
-    {
-      question: 'Why use promotional videos?',
-      answer: 'Many companies opt to produce a promotional video instead of using other advertising methods to connect with their audience in a way that text cannot. Video plays a vital role in marketing by capturing the audience\'s attention and demonstrating the value that your company offers to them.',
-    },
-    {
-      question: 'Is a promotional video an advertisement?',
-      answer: 'A promotional video can serve as an advertisement, but it goes beyond traditional advertising. It tells your brand story, showcases your products or services, and creates a personal connection with viewers through compelling narratives and visual storytelling.',
-    },
-    {
-      question: 'What is the impact of a promotional video?',
-      answer: 'Promotional videos can significantly increase brand awareness, engagement, and conversion rates. They help communicate your message more effectively, build trust with your audience, and can lead to new leads and customers through increased visibility and emotional connection.',
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: 'Edupro',
-      company: 'Edupro',
-      image: '👥',
-    },
-    {
-      text: 'Not only does Makura Creations have a good script writer and videographer, their post production editing is also top-notch. The editors gladly accepted any changes we had and provided the updated video swiftly. The pacing, audio, color selection are all perfect for each respective video delivery and visual presentation are something',
-      name: 'Hello Topik',
-      company: 'Hello Topik',
-      image: '👥',
-    },
-    {
-      text: 'The best way to engage an audience is with promotional videos and no one does it better than Makura Creations. My business needed a bit of storytelling to bring in more clients and the team at Makura Creations were just perfect for the job. The video led to new leads and brought in more customers. They subtly showcased my products wit',
-      name: 'Seed Finance',
-      company: 'Seed Finance',
-      image: '👥',
     },
   ];
 
@@ -188,15 +251,15 @@ const PromotionalVideo = () => {
           </p>
 
           <div className="testimonials-grid">
-            {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="testimonial-card">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial._id} className="testimonial-card">
                 <div className="testimonial-quote">❝</div>
                 <p className="testimonial-text">{testimonial.text}</p>
                 <div className="testimonial-author">
-                  <div className="author-avatar">{testimonial.image}</div>
+                  <div className="author-avatar">{testimonial.authorAvatar || '👥'}</div>
                   <div className="author-info">
-                    <h4>{testimonial.name}</h4>
-                    <p>{testimonial.company}</p>
+                    <h4>{testimonial.authorName}</h4>
+                    <p>{testimonial.authorCompany}</p>
                   </div>
                 </div>
               </div>

@@ -18,7 +18,7 @@ const AdminLogin: React.FC = () => {
       const res = await adminService.login(email, password);
       localStorage.setItem('admin_token', res.token);
       localStorage.setItem('admin_user', JSON.stringify(res.admin));
-      navigate('/admin');
+      navigate('/admin/blog');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {

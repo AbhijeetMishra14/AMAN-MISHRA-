@@ -26,7 +26,7 @@ const formatWhatsAppNumber = (number) => {
 };
 
 /**
- * Send message via WhatsApp Business API
+ * Send message via WhatsApp Business API (Text message - no template required)
  * @param {string} recipientNumber - Recipient phone number
  * @param {string} message - Message content
  * @returns {Promise<Object>} Response from WhatsApp API
@@ -45,23 +45,9 @@ export const sendWhatsAppMessage = async (recipientNumber, message) => {
       {
         messaging_product: 'whatsapp',
         to: formattedNumber,
-        type: 'template',
-        template: {
-          name: 'jaspers_market_plain_text_v1',
-          language: {
-            code: 'en_US'
-          },
-          components: [
-            {
-              type: 'body',
-              parameters: [
-                {
-                  type: 'text',
-                  text: message
-                }
-              ]
-            }
-          ]
+        type: 'text',
+        text: {
+          body: message
         }
       },
       {
