@@ -13,6 +13,13 @@ const Header = () => {
   const [isDigitalMarketingOpen, setIsDigitalMarketingOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setIsServicesOpen(false);
+    setIsResourcesOpen(false);
+    setIsCompanyOpen(false);
+  };
+
   return (
     <header className="header">
       <StartProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
@@ -30,7 +37,7 @@ const Header = () => {
           </Link>
 
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/" className="nav-link" onClick={closeMenu}>Home</Link>
             
             <div 
               className="nav-dropdown"
@@ -38,15 +45,15 @@ const Header = () => {
               onMouseLeave={() => setIsCompanyOpen(false)}
             >
               <span className="nav-link">
-                Company
+                About
                 <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
               <div className={`dropdown-menu ${isCompanyOpen ? 'show' : ''}`}>
-                <Link to="/about" className="dropdown-item">About Us</Link>
-                <Link to="/contact" className="dropdown-item">Contact</Link>
-                <Link to="/career" className="dropdown-item">Career</Link>
+                <Link to="/about" className="dropdown-item" onClick={closeMenu}>About Me</Link>
+                <Link to="/contact" className="dropdown-item" onClick={closeMenu}>Contact</Link>
+                <Link to="/career" className="dropdown-item" onClick={closeMenu}>Career</Link>
               </div>
             </div>
 
@@ -75,7 +82,7 @@ const Header = () => {
                     </svg>
                   </span>
                   <div className={`dropdown-submenu-menu ${isWebDevOpen ? 'show' : ''}`}>
-                    <Link to="/service/wordpress-development" className="dropdown-item">WordPress Development</Link>
+                    <Link to="/service/wordpress-development" className="dropdown-item" onClick={closeMenu}>WordPress Development</Link>
                   </div>
                 </div>
 
@@ -92,13 +99,13 @@ const Header = () => {
                     </svg>
                   </span>
                   <div className={`dropdown-submenu-menu ${isDigitalMarketingOpen ? 'show' : ''}`}>
-                    <Link to="/service/seo-service-nepal" className="dropdown-item">Search Engine Optimization (SEO)</Link>
-                    <Link to="/service/promotional-video" className="dropdown-item">Promotional Video</Link>
+                    <Link to="/service/seo-service-nepal" className="dropdown-item" onClick={closeMenu}>Search Engine Optimization (SEO)</Link>
+                    <Link to="/service/promotional-video" className="dropdown-item" onClick={closeMenu}>Promotional Video</Link>
                   </div>
                 </div>
 
                 {/* Individual Services */}
-                <Link to="/service/ui-ux-design" className="dropdown-item">UI/UX Design</Link>
+                <Link to="/service/ui-ux-design" className="dropdown-item" onClick={closeMenu}>UI/UX Design</Link>
               </div>
             </div>
 
@@ -114,16 +121,19 @@ const Header = () => {
                 </svg>
               </span>
               <div className={`dropdown-menu ${isResourcesOpen ? 'show' : ''}`}>
-                <Link to="/pricing" className="dropdown-item">Pricing</Link>
+                <Link to="/pricing" className="dropdown-item" onClick={closeMenu}>Pricing</Link>
               </div>
             </div>
 
-            <Link to="/blogs" className="nav-link">Blog</Link>
+            <Link to="/blogs" className="nav-link" onClick={closeMenu}>Blog</Link>
           </nav>
 
           <button 
             className="btn btn-nav"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true);
+              closeMenu();
+            }}
           >
             Start your project →
           </button>

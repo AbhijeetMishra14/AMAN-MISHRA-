@@ -14,6 +14,13 @@ import DigitalMarketing from './pages/services/DigitalMarketing';
 import SEOService from './pages/services/SEOService';
 import PromotionalVideo from './pages/services/PromotionalVideo';
 import UIUXDesign from './pages/services/UIUXDesign';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminClients from './pages/AdminClients';
+import AdminPricing from './pages/AdminPricing';
+import AdminCareer from './pages/AdminCareer';
+import AdminFAQ from './pages/AdminFAQ';
+import BlogEditor from './pages/BlogEditor';
 import './App.css';
 
 function App() {
@@ -36,6 +43,16 @@ function App() {
             <Route path="/service/seo-service-nepal" element={<SEOService />} />
             <Route path="/service/promotional-video" element={<PromotionalVideo />} />
             <Route path="/service/ui-ux-design" element={<UIUXDesign />} />
+            
+            {/* Admin routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/clients" element={<AdminClients />} />
+            <Route path="/admin/pricing" element={<AdminPricing />} />
+            <Route path="/admin/careers" element={<AdminCareer />} />
+            <Route path="/admin/faq" element={<AdminFAQ />} />
+            <Route path="/admin/blog/new" element={<BlogEditor />} />
+            <Route path="/admin/blog/:id" element={<BlogEditor />} />
           </Routes>
         </main>
         <Footer />

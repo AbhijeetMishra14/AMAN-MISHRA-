@@ -14,16 +14,41 @@ const Contact = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ firstName: '', lastName: '', email: '', message: '' });
-    }, 3000);
+    setIsLoading(true);
+
+    try {
+      // Send to backend
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('Contact form submitted:', result);
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({ firstName: '', lastName: '', email: '', message: '' });
+        }, 3000);
+      } else {
+        alert(`Error: ${result.error || 'Failed to submit form'}`);
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      alert('Network error. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -146,6 +171,7 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="Enter your First Name"
                       required
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="form-group">
@@ -158,6 +184,7 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="Enter your Last Name"
                       required
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -172,6 +199,7 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="Enter your email address"
                     required
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -185,11 +213,12 @@ const Contact = () => {
                     placeholder="Enter your message here."
                     rows={6}
                     required
+                    disabled={isLoading}
                   ></textarea>
                 </div>
 
-                <button type="submit" className="btn-submit">
-                  Submit Message
+                <button type="submit" className="btn-submit" disabled={isLoading}>
+                  {isLoading ? 'Sending...' : 'Submit Message'}
                 </button>
               </form>
             </div>

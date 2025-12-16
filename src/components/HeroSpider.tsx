@@ -3,9 +3,12 @@ import { loadSlim } from "tsparticles-slim";
 import { useCallback } from "react";
 
 export default function HeroSpider() {
-  const particlesInit = useCallback(async (engine: any) => {
-    await loadSlim(engine);
-  }, []);
+  const particlesInit = useCallback(
+    async (engine: unknown) => {
+      await loadSlim(engine as any);
+    },
+    []
+  );
 
   return (
     <div className="hero-spider-container">
@@ -13,12 +16,12 @@ export default function HeroSpider() {
         id="hero-spider"
         init={particlesInit}
         options={{
-          fullScreen: { enable: false },
+          fullScreen: { enable: true },
           background: { color: "transparent" },
           fpsLimit: 60,
           particles: {
             number: {
-              value: 80,
+              value: 120,
               density: { 
                 enable: true, 
                 area: 800 
@@ -31,14 +34,14 @@ export default function HeroSpider() {
               type: "circle",
             },
             opacity: {
-              value: 0.5,
+              value: 0.6,
               random: false,
               animation: {
                 enable: false,
               },
             },
             size: {
-              value: 2,
+              value: 3,
               random: {
                 enable: true,
                 minimumValue: 1,
@@ -46,17 +49,17 @@ export default function HeroSpider() {
             },
             links: {
               enable: true,
-              distance: 150,
+              distance: 180,
               color: "#ffffff",
-              opacity: 0.4,
-              width: 1,
+              opacity: 0.5,
+              width: 1.5,
               triangles: {
                 enable: false,
               },
             },
             move: {
               enable: true,
-              speed: 0.5,
+              speed: 0.8,
               direction: "none",
               random: false,
               straight: false,
@@ -86,7 +89,7 @@ export default function HeroSpider() {
             },
             modes: {
               grab: {
-                distance: 180,
+                distance: 200,
                 links: {
                   opacity: 0.8,
                   blink: false,

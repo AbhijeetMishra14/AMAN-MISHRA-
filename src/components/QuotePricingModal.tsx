@@ -30,26 +30,35 @@ const QuotePricingModal = ({ isOpen, onClose }: QuotePricingModalProps) => {
     setIsSubmitting(true);
 
     try {
-      // Here you would send the form data to your backend
-      console.log('Form submitted:', formData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSubmitMessage('Quote request sent successfully! We will contact you soon.');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        additionalDetails: '',
+      // Send to backend
+      const response = await fetch('http://localhost:5000/api/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
       });
 
-      setTimeout(() => {
-        setSubmitMessage('');
-        onClose();
-      }, 2000);
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitMessage('✓ Quote request sent successfully! We will contact you soon.');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          additionalDetails: '',
+        });
+
+        setTimeout(() => {
+          setSubmitMessage('');
+          onClose();
+        }, 2000);
+      } else {
+        setSubmitMessage(`Error: ${result.error || 'Failed to send quote request'}`);
+      }
     } catch (error) {
-      setSubmitMessage('Error sending request. Please try again.');
+      setSubmitMessage('Error sending request. Please check your connection and try again.');
       console.error('Error:', error);
     } finally {
       setIsSubmitting(false);

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaChartLine, FaMapMarkerAlt, FaSpellCheck, FaEye, FaFileWord } from 'react-icons/fa';
 import { SiGoogleads, SiOpenai, SiGoogle } from 'react-icons/si';
 import QuotePricingModal from '../../components/QuotePricingModal';
+import { adminService } from '../../services/adminService';
 import Frame from '../../assets/Frame.svg';
 import Frame1 from '../../assets/Frame-1.svg';
 
@@ -19,9 +20,50 @@ import FAQImg from '../../assets/Seo/9.svg';
 // Images 9.svg and 10.svg are available for Stages and Works sections if needed
 import './ServicePage.css';
 
+const faqsData = [
+  {
+    question: "What is SEO and why is it important for my business in Nepal?",
+    answer: "SEO, or Search Engine Optimization, is the practice of optimizing your website to rank higher in search engine results. For businesses in Nepal, SEO is crucial because it increases online visibility, attracts targeted local customers, and builds credibility. A strong SEO strategy helps you stand out from the competition and drives organic traffic, which is essential for sustainable growth in the digital market."
+  },
+  {
+    question: "How long does it take to see results from SEO?",
+    answer: "SEO is a long-term strategy, and results can vary based on factors like your industry, competition, and the current state of your website. Typically, you can expect to see noticeable improvements in rankings and traffic within 3 to 6 months. However, the most significant and lasting results come from consistent, ongoing optimization efforts."
+  },
+  {
+    question: "What is the difference between on-page and off-page SEO?",
+    answer: "On-page SEO involves optimizing elements on your website, such as content, keywords, meta tags, and site structure, to make it more search engine-friendly. Off-page SEO, on the other hand, focuses on building your website’s authority and reputation through external signals, like backlinks from other reputable sites, social media engagement, and local listings. Both are essential for a comprehensive SEO strategy."
+  },
+  {
+    question: "Can I do SEO myself, or should I hire a professional?",
+    answer: "While you can learn the basics of SEO, it’s a complex and ever-changing field. Hiring a professional SEO service in Nepal ensures that you have an expert dedicated to implementing the latest strategies and best practices. A professional can conduct in-depth analysis, manage technical aspects, and create a tailored strategy to help you achieve your business goals more effectively, saving you time and delivering better results."
+  }
+];
+
+type PageFAQ = {
+  _id: string;
+  question: string;
+  answer: string;
+};
+
 const SEOService = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(0);
+  const [faqs, setFaqs] = useState<PageFAQ[]>([]);
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      try {
+        const data = await adminService.getFAQsByPage('seo-service');
+        const faqList = Array.isArray(data) ? data : (data?.faqs || []);
+        if (faqList.length > 0) {
+          setFaqs(faqList);
+        }
+      } catch (error) {
+        console.error('Failed to fetch FAQs:', error);
+      }
+    };
+    fetchFAQs();
+  }, []);
 
   const toggleFAQ = (index: number) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
@@ -545,55 +587,15 @@ const SEOService = () => {
             </div>
 
             <div className="faq-items">
-              <div className={`faq-item ${expandedFAQ === 0 ? 'expanded' : ''}`}>
-                <h3 onClick={() => toggleFAQ(0)}>
-                  Is SEO easy?
-                  <span className="faq-toggle">{expandedFAQ === 0 ? '−' : '+'}</span>
-                </h3>
-                {expandedFAQ === 0 && (
-                  <p>SEO can be challenging, but it's not overly complicated. Some strategies can be implemented immediately, while others require more time and dedication. Therefore, performing SEO on your own is a feasible option.</p>
-                )}
-              </div>
-
-              <div className={`faq-item ${expandedFAQ === 1 ? 'expanded' : ''}`}>
-                <h3 onClick={() => toggleFAQ(1)}>
-                  How exactly does SEO work?
-                  <span className="faq-toggle">{expandedFAQ === 1 ? '−' : '+'}</span>
-                </h3>
-                {expandedFAQ === 1 && (
-                  <p>SEO works by optimizing your website to meet search engine guidelines, making it easier for search engines to crawl, index, and rank your content. This involves technical optimization, content creation, and building authority through backlinks and user engagement signals.</p>
-                )}
-              </div>
-
-              <div className={`faq-item ${expandedFAQ === 2 ? 'expanded' : ''}`}>
-                <h3 onClick={() => toggleFAQ(2)}>
-                  Do you need coding for SEO?
-                  <span className="faq-toggle">{expandedFAQ === 2 ? '−' : '+'}</span>
-                </h3>
-                {expandedFAQ === 2 && (
-                  <p>While basic SEO can be done without coding knowledge, technical SEO often requires some understanding of HTML, CSS, and JavaScript. However, many SEO tasks can be accomplished using tools and platforms that don't require coding expertise.</p>
-                )}
-              </div>
-
-              <div className={`faq-item ${expandedFAQ === 3 ? 'expanded' : ''}`}>
-                <h3 onClick={() => toggleFAQ(3)}>
-                  How long does it take to see SEO results?
-                  <span className="faq-toggle">{expandedFAQ === 3 ? '−' : '+'}</span>
-                </h3>
-                {expandedFAQ === 3 && (
-                  <p>SEO is a long-term strategy. Typically, you can expect to see initial results within 3-6 months, with significant improvements appearing after 6-12 months of consistent optimization efforts. Results vary based on competition, website age, and the quality of optimization.</p>
-                )}
-              </div>
-
-              <div className={`faq-item ${expandedFAQ === 4 ? 'expanded' : ''}`}>
-                <h3 onClick={() => toggleFAQ(4)}>
-                  What is the difference between SEO and SEM?
-                  <span className="faq-toggle">{expandedFAQ === 4 ? '−' : '+'}</span>
-                </h3>
-                {expandedFAQ === 4 && (
-                  <p>SEO (Search Engine Optimization) focuses on organic, unpaid search results, while SEM (Search Engine Marketing) includes both organic SEO and paid advertising like Google Ads. SEO is free but takes time, while SEM can provide immediate results but requires ongoing ad spend.</p>
-                )}
-              </div>
+              {(faqs.length > 0 ? faqs : faqsData).map((faq, index) => (
+                <div key={index} className="faq-item">
+                  <div className="faq-question" onClick={() => toggleFAQ(index)}>
+                    <h3>{faq.question}</h3>
+                    <span className={`faq-icon ${expandedFAQ === index ? 'expanded' : ''}`}>+</span>
+                  </div>
+                  {expandedFAQ === index && <p className="faq-answer">{faq.answer}</p>}
+                </div>
+              ))}
             </div>
           </div>
         </div>

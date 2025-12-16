@@ -112,7 +112,7 @@ const StartProjectModal = ({ isOpen, onClose }: StartProjectModalProps) => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const step = steps[currentStep - 1];
     const fieldValue = formData[step.key as keyof typeof formData];
 
@@ -122,19 +122,41 @@ const StartProjectModal = ({ isOpen, onClose }: StartProjectModalProps) => {
       return;
     }
 
-    console.log('Project request submitted:', formData);
-    // Handle form submission here
-    onClose();
-    // Reset form
-    setCurrentStep(1);
-    setError('');
-    setFormData({
-      projectType: '',
-      budget: '',
-      timeline: '',
-      description: '',
-      contactEmail: ''
-    });
+    try {
+      // Send to backend
+      const response = await fetch('http://localhost:5000/api/project', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('Project request submitted:', result);
+        // Show success message
+        alert('✓ Project request submitted successfully! We will contact you soon.');
+        
+        // Close modal and reset
+        onClose();
+        setCurrentStep(1);
+        setError('');
+        setFormData({
+          projectType: '',
+          budget: '',
+          timeline: '',
+          description: '',
+          contactEmail: ''
+        });
+      } else {
+        setError(result.error || 'Failed to submit project request');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setError('Network error. Please check your connection and try again.');
+    }
   };
 
   const currentStepData = steps[currentStep - 1];

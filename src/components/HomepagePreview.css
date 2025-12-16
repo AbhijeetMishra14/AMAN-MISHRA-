@@ -1,0 +1,253 @@
+/* Homepage Preview Styles */
+
+.homepage-preview {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 0 12px 12px 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+}
+
+.preview-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #a0aec0;
+  text-align: center;
+  font-size: 16px;
+}
+
+.preview-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+/* Hero Section Preview */
+.preview-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.preview-hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.preview-hero p {
+  font-size: 18px;
+  margin: 0 0 30px 0;
+  opacity: 0.9;
+}
+
+/* About Section Preview */
+.preview-about {
+  background-color: #f7fafc;
+  padding: 80px 20px;
+}
+
+.preview-about h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.preview-about p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #4a5568;
+  max-width: 800px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+/* Features Section Preview */
+.preview-features {
+  padding: 80px 20px;
+  background-color: #ffffff;
+}
+
+.preview-features h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 50px 0;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.feature-item {
+  background: #f7fafc;
+  padding: 30px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.feature-item h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 10px 0;
+}
+
+.feature-item p {
+  font-size: 14px;
+  color: #718096;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* CTA Section Preview */
+.preview-cta {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.preview-cta h2 {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+.preview-cta p {
+  font-size: 18px;
+  margin: 0 0 30px 0;
+  opacity: 0.95;
+}
+
+/* Testimonials Section Preview */
+.preview-testimonials {
+  background-color: #f7fafc;
+  padding: 80px 20px;
+}
+
+.preview-testimonials h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.preview-testimonials p {
+  font-size: 16px;
+  color: #718096;
+  text-align: center;
+  margin: 0;
+}
+
+/* FAQ Section Preview */
+.preview-faq {
+  padding: 80px 20px;
+  background-color: #ffffff;
+}
+
+.preview-faq h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Pricing Section Preview */
+.preview-pricing {
+  background-color: #f7fafc;
+  padding: 80px 20px;
+}
+
+.preview-pricing h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Clients Section Preview */
+.preview-clients {
+  padding: 80px 20px;
+  background-color: #ffffff;
+}
+
+.preview-clients h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Buttons */
+.preview-btn,
+.preview-btn-secondary,
+.preview-btn-primary {
+  display: inline-block;
+  padding: 12px 30px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.preview-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+.preview-btn:hover {
+  background-color: white;
+  color: #667eea;
+}
+
+.preview-btn-secondary {
+  background-color: #667eea;
+  color: white;
+}
+
+.preview-btn-secondary:hover {
+  background-color: #5568d3;
+  transform: translateY(-2px);
+}
+
+.preview-btn-primary {
+  background-color: white;
+  color: #667eea;
+  margin-top: 20px;
+}
+
+.preview-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.placeholder {
+  color: #cbd5e0;
+  font-style: italic;
+  text-align: center;
+  padding: 40px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .homepage-preview {
+    display: none;
+  }
+}

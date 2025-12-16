@@ -1,9 +1,15 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import StartProjectModal from '../../components/StartProjectModal';
 import './ServicePage.css';
 
 const UIUXDesign = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="service-page">
+      <StartProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       <section className="page-hero">
         <div className="container">
           <h1>UI/UX Design</h1>
@@ -46,7 +52,7 @@ const UIUXDesign = () => {
           </div>
 
           <div className="service-cta">
-            <Link to="/contact" className="btn btn-primary">Get Started</Link>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">Get Started</button>
           </div>
         </div>
       </section>

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaPhp, FaHtml5, FaCss3Alt, FaJs, FaDatabase, FaWordpress, FaCheckCircle, FaReact } from 'react-icons/fa';
 import { SiNextdotjs } from 'react-icons/si';
 import QuotePricingModal from '../../components/QuotePricingModal';
+import { adminService } from '../../services/adminService';
 import WordPressImg from '../../assets/wordpress-website-development.png';
 import CustomWPImg from '../../assets/custom-wordpress-development.svg';
 import PluginImg from '../../assets/plugin-development.svg';
@@ -11,8 +12,51 @@ import MaintenanceImg from '../../assets/wordpress-maintainence.svg';
 import FAQImg from '../../assets/faqs-blue-2.png';
 import './ServicePage.css';
 
+type PageFAQ = {
+  _id: string;
+  question: string;
+  answer: string;
+};
+
+const DEFAULT_WP_FAQS: PageFAQ[] = [
+  {
+    _id: '1',
+    question: 'What is the purpose of WordPress?',
+    answer: 'WordPress is essentially a tool for creating websites without knowing any code. It is the most popular website construction program in the world because of its versatility and ease of use.',
+  },
+  {
+    _id: '2',
+    question: 'Is WordPress Reliable?',
+    answer: 'Yes, WordPress is highly reliable and secure when properly maintained. It powers over 40% of all websites on the internet and is backed by a large community of developers constantly improving the platform.',
+  },
+  {
+    _id: '3',
+    question: 'Who requires WordPress?',
+    answer: 'WordPress is suitable for everyone from small business owners to large enterprises. Whether you need a blog, e-commerce store, portfolio, or corporate website, WordPress can be customized to meet your needs.',
+  },
+];
+
 const WordPressDevelopment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [faqs, setFaqs] = useState<PageFAQ[]>(DEFAULT_WP_FAQS);
+
+  useEffect(() => {
+    const fetchFAQs = async () => {
+      try {
+        const data = await adminService.getFAQsByPage('wordpress-development');
+        const faqList = Array.isArray(data) ? data : (data?.faqs || []);
+        if (faqList.length > 0) {
+          setFaqs(faqList);
+        } else {
+          setFaqs(DEFAULT_WP_FAQS);
+        }
+      } catch (error) {
+        console.error('Failed to fetch FAQs:', error);
+        setFaqs(DEFAULT_WP_FAQS);
+      }
+    };
+    fetchFAQs();
+  }, []);
 
   return (
     <div className="service-page">
@@ -344,20 +388,12 @@ const WordPressDevelopment = () => {
             </div>
 
             <div className="faq-items">
-              <div className="faq-item">
-                <h3>What is the purpose of WordPress?</h3>
-                <p>WordPress is essentially a tool for creating websites without knowing any code. It is the most popular website construction program in the world because of its versatility and ease of use.</p>
-              </div>
-
-              <div className="faq-item">
-                <h3>Is WordPress Reliable?</h3>
-                <p>Yes, WordPress is highly reliable and secure when properly maintained. It powers over 40% of all websites on the internet and is backed by a large community of developers constantly improving the platform.</p>
-              </div>
-
-              <div className="faq-item">
-                <h3>Who requires WordPress?</h3>
-                <p>WordPress is suitable for everyone from small business owners to large enterprises. Whether you need a blog, e-commerce store, portfolio, or corporate website, WordPress can be customized to meet your needs.</p>
-              </div>
+              {(faqs && faqs.length > 0 ? faqs : DEFAULT_WP_FAQS).map((faq) => (
+                <div key={faq._id} className="faq-item">
+                  <h3>{faq.question}</h3>
+                  <p>{faq.answer}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
