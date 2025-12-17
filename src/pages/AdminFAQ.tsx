@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
-import './styles/AdminFAQ.css';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
+import './styles/AdminFAQ.css';
 
 interface FAQ {
   _id: string;
@@ -140,25 +141,17 @@ const AdminFAQ: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    adminService.logout();
-    navigate('/admin/login');
-  };
-
   return (
     <div className="admin-faq-container">
-      <AdminSidebar />
+      <AdminNavbar 
+        title="❓ FAQ Management" 
+        subtitle="Manage your frequently asked questions"
+      />
+      
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
 
-      <div className="admin-faq-content">
-        <header className="dashboard-header">
-            <div className="header-left">
-              <h1>❓ FAQ Management</h1>
-              <p>Manage your frequently asked questions</p>
-            </div>
-            <button onClick={handleLogout} className="btn-logout">
-              Logout
-            </button>
-          </header>
+        <div className="admin-faq-content">
 
           <div className="dashboard-main">
               <div className="section-header">
@@ -307,7 +300,8 @@ const AdminFAQ: React.FC = () => {
               </div>
             </div>
           </div>
-    </div>
+        </div>
+      </div>
   );
 };
 

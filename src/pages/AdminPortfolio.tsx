@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
 import './styles/AdminPortfolio.css';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
 
 interface Portfolio {
@@ -158,26 +159,23 @@ const AdminPortfolio: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    adminService.logout();
-    navigate('/admin/login');
-  };
-
   const filteredPortfolios = selectedPage === 'all' 
     ? portfolios 
     : portfolios.filter(p => p.page === selectedPage);
 
   return (
-    <div className="admin-portfolio-container">
-      <AdminSidebar />
+    <div className="admin-dashboard">
+      <AdminNavbar 
+        title="📂 Portfolio Management" 
+        subtitle="Manage your portfolio items across all service pages"
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
 
-      <div className="admin-portfolio-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>📂 Portfolio Management</h1>
-            <p>Manage your portfolio items across all service pages</p>
-          </div>
-          <button onClick={handleLogout} className="btn-logout">
+        <div className="admin-portfolio-content">
+        <header className="admin-header">
+          <h1>Welcome, Admin!</h1>
+          <button className="btn-logout">
             Logout
           </button>
         </header>
@@ -365,6 +363,7 @@ const AdminPortfolio: React.FC = () => {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

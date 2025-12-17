@@ -351,12 +351,12 @@ export const adminService = {
     return res.data;
   },
 
-  createPageSection: async (data: any) => {
+  createPageSection: async (data: Record<string, unknown>) => {
     const res = await adminAPI.post('/pageSections', data);
     return res.data;
   },
 
-  updatePageSection: async (id: string, data: any) => {
+  updatePageSection: async (id: string, data: Record<string, unknown>) => {
     const res = await adminAPI.put(`/pageSections/${id}`, data);
     return res.data;
   },
@@ -366,7 +366,7 @@ export const adminService = {
     return res.data;
   },
 
-  reorderPageSections: async (sections: any[]) => {
+  reorderPageSections: async (sections: Array<{_id: string; order: number}>) => {
     const res = await adminAPI.put('/pageSections/reorder/all', { sections });
     return res.data;
   },

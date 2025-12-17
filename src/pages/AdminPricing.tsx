@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
 import PricingModal from '../components/PricingModal';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
 import './styles/AdminDashboard.css';
 
@@ -18,18 +19,6 @@ type PricingPlan = {
   active?: boolean;
 };
 
-const emptyPlan: PricingPlan = {
-  _id: '',
-  name: '',
-  subtitle: '',
-  price: 0,
-  popular: false,
-  badge: '',
-  features: [],
-  interval: 'Monthly',
-  order: 0,
-  active: true,
-};
 
 const defaultPlans: Omit<PricingPlan, '_id'>[] = [
   {
@@ -320,7 +309,10 @@ const AdminPricing: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
+      <AdminNavbar 
+        title="💰 Pricing Management" 
+        subtitle="Manage pricing plans displayed on the Pricing page"
+      />
       
       <PricingModal
         isOpen={isModalOpen}
@@ -332,17 +324,13 @@ const AdminPricing: React.FC = () => {
       />
 
       <div className="admin-pricing-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>💰 Pricing Management</h1>
-            <p>Manage pricing plans displayed on the Pricing page.</p>
-          </div>
-          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
-            Logout
-          </button>
-        </header>
+        
+        <div className="admin-dashboard-wrapper">
+          <AdminSidebar />
+          
+          <div className="admin-dashboard-content">
 
-        <div className="dashboard-main">
+            <div className="dashboard-main">
           <div className="section-header">
             <h2>Pricing Plans</h2>
             <div className="section-header-actions">
@@ -385,6 +373,8 @@ const AdminPricing: React.FC = () => {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
             </div>
           </div>
         </div>

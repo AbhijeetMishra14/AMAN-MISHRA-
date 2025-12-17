@@ -8,6 +8,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: 100%;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
 }
 
 .sidebar-link {
@@ -37,16 +41,11 @@
   background-color: #0069d9;
   color: #fff;
 }
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .dashboard-sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #dee2e6;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 10px;
+  .dashboard-sidebar,
+  .admin-sidebar {
+    display: none;
   }
 
   .sidebar-link {

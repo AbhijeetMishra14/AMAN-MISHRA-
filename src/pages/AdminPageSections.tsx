@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
 import './styles/AdminDashboard.css';
 
@@ -205,20 +206,25 @@ const AdminPageSections: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex' }}>
-        <AdminSidebar />
-        <div style={{ flex: 1, padding: '20px' }}>Loading...</div>
+      <div className="admin-dashboard">
+        <AdminNavbar title="📄 Page Sections" subtitle="Manage homepage sections" />
+        <div className="admin-dashboard-wrapper">
+          <AdminSidebar />
+          <div style={{ flex: 1, padding: '20px' }}>Loading...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-      <AdminSidebar />
-      <div style={{ flex: 1, padding: '40px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h1>📄 Manage Page Sections</h1>
-          <p style={{ color: '#666' }}>Update hero, about, features, and other sections across all pages</p>
+    <div className="admin-dashboard">
+      <AdminNavbar 
+        title="📄 Page Sections" 
+        subtitle="Update hero, about, features, and other sections across all pages"
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        <div className="admin-dashboard-content">
 
           {error && <div style={{ backgroundColor: '#fee', color: '#c00', padding: '12px', borderRadius: '4px', marginBottom: '20px' }}>{error}</div>}
           {success && <div style={{ backgroundColor: '#efe', color: '#060', padding: '12px', borderRadius: '4px', marginBottom: '20px' }}>{success}</div>}

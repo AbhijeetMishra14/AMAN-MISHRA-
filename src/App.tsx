@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import HelpWidget from './components/HelpWidget';
@@ -27,44 +27,53 @@ import AdminHomepageNew from './pages/AdminHomepageNew';
 import BlogEditor from './pages/BlogEditor';
 import './App.css';
 
+function AppContent() {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
+
+  return (
+    <div className="App">
+      {!isAdminPage && <Header />}
+      {!isAdminPage && <HelpWidget />}
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/career" element={<Career />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs/:slug" element={<BlogPost />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/service/wordpress-development" element={<WordPressDevelopment />} />
+          <Route path="/service/digital-marketing" element={<DigitalMarketing />} />
+          <Route path="/service/seo-service-nepal" element={<SEOService />} />
+          <Route path="/service/promotional-video" element={<PromotionalVideo />} />
+          <Route path="/service/ui-ux-design" element={<UIUXDesign />} />
+          
+          {/* Admin routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/pages" element={<AdminPageSections />} />
+          <Route path="/admin/blog" element={<AdminDashboard />} />
+          <Route path="/admin/blog/new" element={<BlogEditor />} />
+          <Route path="/admin/blog/:id" element={<BlogEditor />} />
+          <Route path="/admin/clients" element={<AdminClients />} />
+          <Route path="/admin/pricing" element={<AdminPricing />} />
+          <Route path="/admin/careers" element={<AdminCareer />} />
+          <Route path="/admin/faq" element={<AdminFAQ />} />
+          <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+          <Route path="/admin/portfolio" element={<AdminPortfolio />} />
+          <Route path="/admin/homepage" element={<AdminHomepageNew />} />
+        </Routes>
+      </main>
+      {!isAdminPage && <Footer />}
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Header />
-        <HelpWidget />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/career" element={<Career />} />
-            <Route path="/blogs" element={<Blog />} />
-            <Route path="/blogs/:slug" element={<BlogPost />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/service/wordpress-development" element={<WordPressDevelopment />} />
-            <Route path="/service/digital-marketing" element={<DigitalMarketing />} />
-            <Route path="/service/seo-service-nepal" element={<SEOService />} />
-            <Route path="/service/promotional-video" element={<PromotionalVideo />} />
-            <Route path="/service/ui-ux-design" element={<UIUXDesign />} />
-            
-            {/* Admin routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/pages" element={<AdminPageSections />} />
-            <Route path="/admin/blog" element={<AdminDashboard />} />
-            <Route path="/admin/blog/new" element={<BlogEditor />} />
-            <Route path="/admin/blog/:id" element={<BlogEditor />} />
-            <Route path="/admin/clients" element={<AdminClients />} />
-            <Route path="/admin/pricing" element={<AdminPricing />} />
-            <Route path="/admin/careers" element={<AdminCareer />} />
-            <Route path="/admin/faq" element={<AdminFAQ />} />
-            <Route path="/admin/testimonials" element={<AdminTestimonials />} />
-            <Route path="/admin/portfolio" element={<AdminPortfolio />} />
-            <Route path="/admin/homepage" element={<AdminHomepageNew />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AppContent />
     </Router>
   );
 }

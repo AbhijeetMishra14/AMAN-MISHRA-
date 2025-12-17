@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
 import './styles/AdminDashboard.css';
 import './styles/AdminTestimonials.css';
@@ -137,20 +138,16 @@ const AdminTestimonials: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
-      
-      <div className="admin-dashboard-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>💬 Testimonials Management</h1>
-            <p>Manage testimonials displayed on service pages</p>
-          </div>
-          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
-            Logout
-          </button>
-        </header>
+      <AdminNavbar 
+        title="💬 Testimonials Management" 
+        subtitle="Manage testimonials displayed on service pages"
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        
+        <div className="admin-dashboard-content">
 
-        <div className="dashboard-main">
+          <div className="dashboard-main">
 
           <div className="section-header">
             <h2>💬 Testimonials ({filteredTestimonials.length})</h2>
@@ -332,6 +329,7 @@ const AdminTestimonials: React.FC = () => {
         </div>
       )}
         </div>
+      </div>
       </div>
     </div>
   );

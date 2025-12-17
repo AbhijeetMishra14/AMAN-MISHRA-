@@ -1,8 +1,13 @@
 .admin-faq-container {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  background-color: #f8f9fa;
-  gap: 0;
+  background-color: #f5f7fa;
+}
+
+.admin-dashboard-wrapper {
+  display: flex;
+  flex: 1;
 }
 
 .admin-faq-content {

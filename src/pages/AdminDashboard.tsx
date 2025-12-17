@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
-import './styles/AdminDashboard.css';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
+import './styles/AdminDashboard.css';
 
 // Helper function to construct full image URL
 const getImageUrl = (imagePath: string): string => {
@@ -73,11 +74,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    adminService.logout();
-    navigate('/admin/login');
-  };
-
   const categories = [
     'All',
     'Company',
@@ -96,18 +92,14 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
-      
-      <div className="admin-dashboard-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>� Admin Blog</h1>
-            <p>Welcome, {admin?.name || admin?.email || 'Admin'}</p>
-          </div>
-          <button onClick={handleLogout} className="btn-logout">
-            Logout
-          </button>
-        </header>
+      <AdminNavbar 
+        title="📝 Admin Blog" 
+        subtitle={`Welcome, ${admin?.name || admin?.email || 'Admin'}`}
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        
+
 
         <div className="dashboard-main">
           <div className="section-header">
@@ -152,13 +144,11 @@ const AdminDashboard: React.FC = () => {
                   {blog.images && blog.images[0] && (
                     <div className="blog-thumb">
                       <img 
-                        src={getImageUrl(blog.images[0])} 
+                        src={getImageUrl(blog.images?.[0] || '')} 
                         alt={blog.title}
                         onError={(e) => {
-                          console.warn(`Failed to load image: ${blog.images[0]}`);
                           e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="16"%3E⚠️ Image failed to load%3C/text%3E%3C/svg%3E';
                         }}
-                        onLoad={() => console.log(`Loaded image: ${blog.images[0]}`)}
                       />
                     </div>
                   )}

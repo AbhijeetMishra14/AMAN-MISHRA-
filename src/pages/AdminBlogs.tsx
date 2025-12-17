@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import adminService from '../services/adminService';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
 import './styles/AdminDashboard.css';
 import './styles/AdminBlogs.css';
@@ -47,20 +48,16 @@ const AdminBlogs: React.FC = () => {
 
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
-      
-      <div className="admin-dashboard-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>📝 Blog Posts</h1>
-            <p>Manage and create blog posts</p>
-          </div>
-          <button onClick={() => { adminService.logout(); navigate('/admin/login'); }} className="btn-logout">
-            Logout
-          </button>
-        </header>
+      <AdminNavbar 
+        title="📝 Blog Posts" 
+        subtitle="Manage and create blog posts"
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        
+        <div className="admin-dashboard-content">
 
-        <div className="dashboard-main">
+          <div className="dashboard-main">
           <div className="section-header">
             <h2>All Posts ({blogs.length})</h2>
             <div className="section-header-actions">
@@ -95,6 +92,7 @@ const AdminBlogs: React.FC = () => {
         </tbody>
       </table>
         </div>
+      </div>
       </div>
     </div>
   );

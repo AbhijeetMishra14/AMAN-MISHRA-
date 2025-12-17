@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
 import ClientLogoModal from '../components/ClientLogoModal';
+import AdminNavbar from '../components/AdminNavbar';
 import './styles/AdminDashboard.css';
 import ClientLogo1 from '../assets/Client-Track/1.png';
 import ClientLogo2 from '../assets/Client-Track/2.jpg';
@@ -36,7 +37,8 @@ const AdminClients: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<ClientLogo | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -108,10 +110,13 @@ const AdminClients: React.FC = () => {
   };
 
   const resetModal = () => {
-    setIsModalOpen(false);
+    setIsAddModalOpen(false);
+    setIsLogoModalOpen(false);
     setEditingClient(null);
     setImageUrl('');
     setManualImageUrl('');
+    setName('');
+    setWebsite('');
     setError('');
   };
 
@@ -130,10 +135,7 @@ const AdminClients: React.FC = () => {
         website: website.trim() || undefined,
       });
       setClients([created, ...clients]);
-      setName('');
-      setWebsite('');
-      setImageUrl('');
-      setManualImageUrl('');
+      resetModal();
     } catch {
       setError('Failed to add client logo');
     }
@@ -149,109 +151,116 @@ const AdminClients: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    adminService.logout();
-    navigate('/admin/login');
-  };
-
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
-      
-      <div className="admin-dashboard-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>🤝 Trusted Clients</h1>
-            <p>Manage client logos displayed on homepage</p>
-          </div>
-          <button onClick={handleLogout} className="btn-logout">
-            Logout
-          </button>
-        </header>
+      <AdminNavbar 
+        title="🤝 Trusted Clients" 
+        subtitle="Manage client logos and information"
+      />
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        
+        <div className="admin-dashboard-content">
 
-        <div className="dashboard-main">
+          <div className="dashboard-main">
           <ClientLogoModal
-            isOpen={isModalOpen}
+            isOpen={isLogoModalOpen}
             onClose={resetModal}
             onSubmit={handleModalSubmit}
             initialData={editingClient || undefined}
             isUploading={uploading}
             onUpload={handleUpload}
           />
-          <div className="section-header">
-            <h2>Our Trusted Clients Logos ({clients.length})</h2>
-          </div>
 
-          <div className="clients-admin-grid">
-            <form className="client-form-card" onSubmit={handleCreate}>
-              <h3>Add New Client Logo</h3>
-              <p className="client-form-hint">
-                Upload a logo and give it a clear name. These images appear in the “Our Trusted Clients” section on the homepage.
-              </p>
-              <label className="client-form-label">
-                Client / Brand Name
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. The Himalayan Odyssey Treks"
-                />
-              </label>
-              <label className="client-form-label">
-                Website (optional)
-                <input
-                  type="url"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  placeholder="https://example.com"
-                />
-              </label>
-
-              <div className="client-upload-row">
-                <button
-                  type="button"
-                  className="btn-new-blog"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                >
-                  {uploading ? 'Uploading...' : 'Upload Logo Image'}
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                />
-              </div>
-
-              <label className="client-form-label">
-                Or paste image URL
-                <input
-                  type="url"
-                  value={manualImageUrl}
-                  onChange={(e) => setManualImageUrl(e.target.value)}
-                  placeholder="https://example.com/logo.png"
-                />
-              </label>
-
-              {imageUrl && (
-                <div className="client-preview">
-                  <span>Preview</span>
-                  <img src={imageUrl} alt="Client logo preview" />
+          {/* Add Client Logo Modal */}
+          {isAddModalOpen && (
+            <div className="modal-overlay" onClick={resetModal}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                  <h2>Add New Client Logo</h2>
+                  <button className="modal-close" onClick={resetModal}>✕</button>
                 </div>
-              )}
+                <form onSubmit={handleCreate} className="modal-form">
+                    <div className="form-group">
+                      <label>Client / Brand Name *</label>
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="e.g. The Himalayan Odyssey Treks"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Website (optional)</label>
+                      <input
+                        type="url"
+                        value={website}
+                        onChange={(e) => setWebsite(e.target.value)}
+                        placeholder="https://example.com"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Upload Logo Image</label>
+                      <button
+                        type="button"
+                        className="btn-new-blog"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploading}
+                      >
+                        {uploading ? 'Uploading...' : '📤 Choose File'}
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Or paste image URL</label>
+                      <input
+                        type="url"
+                        value={manualImageUrl}
+                        onChange={(e) => setManualImageUrl(e.target.value)}
+                        placeholder="https://example.com/logo.png"
+                      />
+                    </div>
+                    {imageUrl && (
+                      <div style={{ padding: '10px', backgroundColor: '#f3f4f6', borderRadius: '6px', marginBottom: '16px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: '600', color: '#6b7280' }}>Preview</span>
+                        <img src={imageUrl} alt="Client logo preview" style={{ maxHeight: '80px', marginTop: '8px' }} />
+                      </div>
+                    )}
 
-              {error && <p className="client-error">{error}</p>}
+                    {error && <p className="client-error">{error}</p>}
 
-              <button type="submit" className="btn-new-blog" disabled={uploading}>
-                Save Client Logo
-              </button>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+                      <button type="button" className="btn-secondary" onClick={resetModal}>
+                        Cancel
+                      </button>
+                      <button type="submit" className="btn-new-blog" disabled={uploading}>
+                        Save Client Logo
+                      </button>
+                    </div>
             </form>
+              </div>
+            </div>
+          )}
+
+            <div className="section-header">
+              <h2>Our Trusted Clients Logos ({clients.length})</h2>
+              <button 
+                className="btn-new-blog"
+                onClick={() => setIsAddModalOpen(true)}
+              >
+                + Add Client Logo
+              </button>
+            </div>
 
             <div className="client-list-card">
-              <h3>Existing Logos</h3>
-              <h4 style={{ marginTop: '6px', marginBottom: '8px', fontSize: '13px', color: '#6b7280' }}>
+              <h4 style={{ marginTop: '0px', marginBottom: '8px', fontSize: '13px', color: '#6b7280' }}>
                 Static logos in code (always shown)
               </h4>
               <div className="client-logo-list" style={{ marginBottom: '12px' }}>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../services/adminService';
-import './styles/AdminDashboard.css';
+import AdminNavbar from '../components/AdminNavbar';
 import AdminSidebar from '../components/AdminSidebar';
+import './styles/AdminDashboard.css';
 
 interface Job {
   _id: string;
@@ -109,27 +110,19 @@ const AdminCareer: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    adminService.logout();
-    navigate('/admin/login');
-  };
-
   return (
     <div className="admin-dashboard">
-      <AdminSidebar />
+      <AdminNavbar 
+        title="💼 Careers" 
+        subtitle="Manage open positions and job listings"
+      />
       
-      <div className="admin-dashboard-content">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1>💼 Careers</h1>
-            <p>Manage open positions and job listings</p>
-          </div>
-          <button onClick={handleLogout} className="btn-logout">
-            Logout
-          </button>
-        </header>
+      <div className="admin-dashboard-wrapper">
+        <AdminSidebar />
+        
+        <div className="admin-dashboard-content">
 
-        <div className="dashboard-main">
+          <div className="dashboard-main">
           <div className="section-header">
             <h2>Open Positions</h2>
           </div>
@@ -242,8 +235,10 @@ const AdminCareer: React.FC = () => {
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
 };
 
 export default AdminCareer;
+
