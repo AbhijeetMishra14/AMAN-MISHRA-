@@ -26,6 +26,18 @@ const BlogPost = () => {
   const tocRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Helper function to construct proper image URL
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return '';
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    // Otherwise construct the full URL
+    const apiBaseUrl = 'http://localhost:5000';
+    return `${apiBaseUrl}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+  };
+
   const handleTOCClick = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -109,7 +121,22 @@ const BlogPost = () => {
         setLoading(true);
         const response = await fetch(`http://localhost:5000/api/blogs/${slug}`);
         if (!response.ok) throw new Error('Blog not found');
-        const data = await response.json();
+        let data = await response.json();
+        
+        // Process content to fix image URLs
+        if (data.content) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data.content, 'text/html');
+          const images = doc.querySelectorAll('img');
+          images.forEach((img) => {
+            const src = img.getAttribute('src');
+            if (src && !src.startsWith('http')) {
+              img.setAttribute('src', getImageUrl(src));
+            }
+          });
+          data.content = doc.body.innerHTML;
+        }
+        
         setBlog(data);
       } catch (err: any) {
         setError(err.message);
@@ -175,10 +202,13 @@ const BlogPost = () => {
             {blog.images && blog.images.length > 0 && (
               <div className="blog-featured-image">
                 <img 
-                  src={blog.images[0]} 
+                  src={getImageUrl(blog.images[0])} 
                   alt={blog.title}
-                  loading="lazy"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  onError={(e) => { 
+                    console.error('Featured image failed to load:', blog.images[0], 'URL:', getImageUrl(blog.images[0]));
+                    e.currentTarget.style.display = 'none'; 
+                  }}
+                  onLoad={() => console.log('Featured image loaded:', blog.images[0])}
                 />
               </div>
             )}

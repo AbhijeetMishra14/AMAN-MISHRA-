@@ -50,6 +50,23 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.quick-edit-hero-btn {
+  margin-left: auto;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.quick-edit-hero-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .dashboard-layout {
   max-width: 1200px;
   margin: 30px auto;

@@ -48,25 +48,37 @@ type FAQ = {
 const DEFAULT_FAQS: FAQ[] = [
   {
     _id: '1',
-    question: 'What services do I get from Aman Mishra?',
-    answer: 'I provide business services from application development to social media management and branding all together so that it becomes easy for you to get your business solution all in one spot.',
+    question: 'What comprehensive services do you offer?',
+    answer: 'We provide end-to-end digital solutions from custom web and mobile app development to strategic digital marketing, branding, and growth consulting. All your business needs—delivered by one trusted partner with proven expertise.',
   },
   {
     _id: '2',
-    question: 'What services do I provide?',
-    answer: 'I offer a range of different services ranging from website development, app development, digital marketing and many more.',
+    question: 'Can you handle my entire digital presence?',
+    answer: 'Absolutely! From UI/UX design and development to SEO, social media management, and brand strategy—we manage your complete digital ecosystem. One team, unified vision, exceptional results.',
   },
   {
     _id: '3',
-    question: 'Do you help with social media promotions as well?',
-    answer: 'Yes, I also have a talented creative team to help your business grow on social media.',
+    question: 'Do you provide digital marketing and social media growth services?',
+    answer: 'Yes! Our expert team specializes in social media strategy, content creation, influencer partnerships, PPC campaigns, and SEO. We grow your audience, boost engagement, and drive qualified leads.',
   },
   {
     _id: '4',
-    question: 'Where are you located?',
-    answer: 'I am based in Nepal, but I work with clients from all over the world.',
+    question: 'Do you work with international clients?',
+    answer: 'Yes, we proudly serve clients worldwide. Based in Nepal with a global network, we deliver timely support and culturally-aware solutions for businesses everywhere.',
   },
 ];
+
+function getImageUrl(imagePath?: string): string {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
+  if (imagePath.startsWith('/')) {
+    return `${baseUrl}${imagePath}`;
+  }
+  return `${baseUrl}/${imagePath}`;
+}
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,17 +86,17 @@ const Home = () => {
   const [loadingBlogs, setLoadingBlogs] = useState(true);
   const [clientLogos, setClientLogos] = useState<ClientLogo[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>(DEFAULT_FAQS);
-  const [heroTitle, setHeroTitle] = useState('Connecting Ideas Digitally – We\'ve Done It for 5 Years!');
-  const [heroSubtitle, setHeroSubtitle] = useState('We are deeply committed to delivering exceptional work with unwavering dedication and passion. Our core motto encapsulates our guiding philosophy: "You Dream, We Weave" – turning your visions into reality.');
-  const [heroButtonText, setHeroButtonText] = useState('Check Out What We Offer →');
+  const [heroTitle, setHeroTitle] = useState('Your Digital Growth Partner – Proven Results, Trusted by Leaders');
+  const [heroSubtitle, setHeroSubtitle] = useState('Custom web & mobile apps, data-driven marketing, and strategic SEO that deliver real ROI. 5+ years transforming ambitious businesses into digital powerhouses. Let\'s build something remarkable together.');
+  const [heroButtonText, setHeroButtonText] = useState('Start Your Free Consultation →');
   const [heroButtonLink, setHeroButtonLink] = useState('/contact');
-  const [aboutTitle, setAboutTitle] = useState('Aman Mishra: SEO Expert & Software Engineer');
-  const [aboutSubtitle, setAboutSubtitle] = useState('With over 4 years of experience as a SEO expert and software engineer, I am a passionate Full Stack Developer, delivering cutting-edge solutions and turning ideas into reality.');
-  const [aboutButtonText, setAboutButtonText] = useState('Explore More');
+  const [aboutTitle, setAboutTitle] = useState('Meet Your Full-Stack Digital Expert: Aman Mishra');
+  const [aboutSubtitle, setAboutSubtitle] = useState('5+ years of proven expertise spanning full-stack development, SEO mastery, and strategic growth consulting. I\'ve helped 50+ businesses scale revenue, boost online visibility, and dominate their markets. When you work with me, you get a dedicated partner invested in your success—not just a vendor.');
+  const [aboutButtonText, setAboutButtonText] = useState('Discover My Story & Approach');
   const [aboutButtonLink, setAboutButtonLink] = useState('/about');
-  const [ctaTitle, setCtaTitle] = useState('Ready to Transform Your Digital Presence?');
-  const [ctaSubtitle, setCtaSubtitle] = useState('Let\'s discuss your project');
-  const [ctaButtonText, setCtaButtonText] = useState('Start your project →');
+  const [ctaTitle, setCtaTitle] = useState('Ready to Accelerate Your Growth?');
+  const [ctaSubtitle, setCtaSubtitle] = useState('Limited availability for new projects this quarter. Let\'s discuss your vision and create a winning strategy today.');
+  const [ctaButtonText, setCtaButtonText] = useState('Schedule Your Strategy Call →');
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -291,7 +303,7 @@ const Home = () => {
       {/* Client Logos */}
       <section className="clients-section">
         <div className="container">
-          <h2 className="clients-title">Our Trusted Clients</h2>
+          <h2 className="clients-title">Trusted by Industry Leaders & Innovators</h2>
           <div className="clients-carousel">
             {(() => {
               const staticLogos = [
@@ -353,32 +365,31 @@ const Home = () => {
       {/* Services Section */}
       <section className="section services-section">
         <div className="container">
-          <h2 className="section-title">Unleash Innovation. Achieve Excellence. Together</h2>
+          <h2 className="section-title">Cutting-Edge Technology Meets Strategic Execution</h2>
           <p className="section-subtitle">
-            I am fueled by a shared passion for cutting-edge solutions and collaborative success. I leverage the latest IT advancements to empower your business transformation.
+            We combine the latest technologies with proven strategies to deliver solutions that drive real business value. From concept to scale, we're your partner in transformation.
           </p>
-          <Link to="/service/web-development-service" className="btn btn-primary">Services</Link>
+          <Link to="/service/web-development-service" className="btn btn-primary">Explore Our Services</Link>
         </div>
       </section>
 
       {/* Communication Section */}
       <section className="section communication-section">
         <div className="container">
-          <h2 className="section-title">Building Success Through Open Communication</h2>
+          <h2 className="section-title">Partnership Built on Transparency & Results</h2>
           <p className="section-subtitle">
-            For me, exceptional results are fueled by exceptional communication. I go beyond great work by fostering a culture of open dialogue and collaboration.
+            We believe in clarity over complexity. Regular updates, honest feedback, and collaborative problem-solving—because your success is a shared responsibility.
           </p>
-          <Link to="/contact" className="btn btn-primary">Contact Us</Link>
+          <Link to="/contact" className="btn btn-primary">Get In Touch</Link>
         </div>
       </section>
 
       {/* Services Grid */}
       <section className="section services-grid-section">
         <div className="container">
-          <h2 className="section-title">Your Chosen IT Company for Digital Transformation</h2>
+          <h2 className="section-title">Complete Digital Solutions Under One Roof</h2>
           <p className="section-subtitle">
-            Setting out on the journey of starting a business or navigating the growth path of a company,
-            you can rely on us to provide tailored solutions that perfectly match your goals.
+            Whether you're launching or scaling, we deliver customized solutions across design, development, and marketing. Every service integrated for maximum impact and efficiency.
           </p>
 
           <div className="services-grid">
@@ -442,9 +453,9 @@ const Home = () => {
           </div>
 
           <div className="text-center" style={{ marginTop: '40px' }}>
-            <p>Not listed here?</p>
-            <p>Request a consultation and comprehensive planning session with our expert team.</p>
-            <Link to="/contact" className="btn btn-primary" style={{ marginTop: '20px' }}>Contact Us</Link>
+            <p>Don't see exactly what you need?</p>
+            <p>We customize solutions for unique business challenges. Schedule a strategic consultation with our experts today.</p>
+            <Link to="/contact" className="btn btn-primary" style={{ marginTop: '20px' }}>Schedule Consultation</Link>
           </div>
         </div>
       </section>
@@ -452,11 +463,10 @@ const Home = () => {
       {/* Testimonials Section – Google Reviews */}
       <section className="section testimonials-section">
         <div className="container">
-          <h2 className="section-title">What Our Clients Say</h2>
+          <h2 className="section-title">Client Success Stories & Reviews</h2>
 
           <p className="section-subtitle">
-            Real feedback from our customers on Google, sharing their experience,
-            satisfaction, and trust in our services.
+            Don't just take our word for it. See what our clients say about their experience working with us and the tangible results we delivered.
           </p>
 
           <div className="elfsight-widget-wrapper">
@@ -472,9 +482,9 @@ const Home = () => {
       {/* Blog Section */}
       <section className="section blog-section">
         <div className="container">
-          <h2 className="section-title">Blogs</h2>
+          <h2 className="section-title">Industry Insights & Strategy Tips</h2>
           <p className="section-subtitle">
-            Keep up to date with the industry and gain insights into the field through our educational blog posts.
+            Stay ahead of trends with expert articles on digital strategy, tech innovation, and growth tactics. Actionable insights to power your business forward.
           </p>
 
           <div className="blog-grid">
@@ -493,16 +503,14 @@ const Home = () => {
               recentBlogs.map((post) => (
                 <Link key={post._id} to={`/blogs/${post.slug}`} className="blog-card">
                   <div className="blog-image">
-                    {post.images && post.images[0] ? (
+                    {post.images && post.images[0] && (
                       <img 
-                        src={post.images[0]} 
+                        src={getImageUrl(post.images[0])} 
                         alt={post.title} 
                         loading="lazy"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
                       />
-                    ) : (
-                      <div className="blog-placeholder">Blog Image</div>
                     )}
                   </div>
                   <div className="blog-content">
@@ -528,8 +536,8 @@ const Home = () => {
       {/* FAQ Section */}
       <section className="section faq-section">
         <div className="container">
-          <h2 className="section-title">The Help Section</h2>
-          <p className="section-subtitle">Some common inquiries concerning my services are addressed below.</p>
+          <h2 className="section-title">Frequently Asked Questions</h2>
+          <p className="section-subtitle">Quick answers to help you understand how we work and what we can deliver for your business.</p>
 
           <div className="faq-grid">
             {(faqs && faqs.length > 0 ? faqs : DEFAULT_FAQS).map((faq) => (

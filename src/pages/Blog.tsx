@@ -2,6 +2,18 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Blog.css';
 
+// Helper function to construct full image URL
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  if (imagePath.startsWith('/')) {
+    return `http://localhost:5000${imagePath}`;
+  }
+  return `http://localhost:5000/${imagePath}`;
+};
+
 interface BlogItem {
   _id: string;
   title: string;
@@ -141,8 +153,14 @@ const Blog = () => {
                     {currentPosts.map((post) => (
                       <Link key={post._id} to={`/blogs/${post.slug}`} className="blog-post-card">
                         <div className="blog-post-image">
-                          {post.images && post.images.length > 0 ? (
-                            <img src={post.images[0]} alt={post.title} />
+                          {post.images && post.images.length > 0 && post.images[0] ? (
+                            <img 
+                              src={getImageUrl(post.images[0])} 
+                              alt={post.title}
+                              onError={() => {
+                                console.error('Image failed to load:', post.images?.[0]);
+                              }}
+                            />
                           ) : (
                             <div className="blog-image-placeholder"></div>
                           )}
@@ -208,4 +226,3 @@ const Blog = () => {
 };
 
 export default Blog;
-

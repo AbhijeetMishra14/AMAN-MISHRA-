@@ -339,6 +339,52 @@ export const adminService = {
     const res = await adminAPI.delete(`/portfolio/${id}`);
     return res.data;
   },
+
+  // Page Sections
+  listPageSections: async () => {
+    const res = await adminAPI.get('/pageSections');
+    return res.data;
+  },
+
+  getPageSection: async (id: string) => {
+    const res = await adminAPI.get(`/pageSections/${id}`);
+    return res.data;
+  },
+
+  createPageSection: async (data: any) => {
+    const res = await adminAPI.post('/pageSections', data);
+    return res.data;
+  },
+
+  updatePageSection: async (id: string, data: any) => {
+    const res = await adminAPI.put(`/pageSections/${id}`, data);
+    return res.data;
+  },
+
+  deletePageSection: async (id: string) => {
+    const res = await adminAPI.delete(`/pageSections/${id}`);
+    return res.data;
+  },
+
+  reorderPageSections: async (sections: any[]) => {
+    const res = await adminAPI.put('/pageSections/reorder/all', { sections });
+    return res.data;
+  },
+
+  togglePageSectionVisibility: async (id: string) => {
+    const res = await adminAPI.patch(`/pageSections/${id}/visibility`);
+    return res.data;
+  },
+
+  seedPageSections: async () => {
+    const res = await adminAPI.post('/pageSections/seed');
+    return res.data;
+  },
+
+  migratePageSections: async () => {
+    const res = await adminAPI.post('/pageSections/migrate');
+    return res.data;
+  },
 };
 
 export default adminService;

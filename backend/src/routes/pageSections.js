@@ -4,6 +4,148 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
+// Seed database with default sections (MUST be before /:id)
+router.post('/seed', requireAuth, async (req, res) => {
+  try {
+    const existingCount = await PageSection.countDocuments();
+    if (existingCount > 0) {
+      return res.status(400).json({ error: 'Database already has sections. Use migrate instead.' });
+    }
+
+    const defaultSections = [
+      {
+        type: 'hero',
+        title: 'Your Digital Growth Partner – Proven Results, Trusted by Leaders',
+        subtitle: 'Custom web & mobile apps, data-driven marketing, and strategic SEO that deliver real ROI. 5+ years transforming ambitious businesses into digital powerhouses. Let\'s build something remarkable together.',
+        buttonText: 'Start Your Free Consultation →',
+        buttonLink: '/contact',
+        order: 0,
+        visible: true,
+        backgroundColor: '#ffffff',
+        textColor: '#000000',
+      },
+      {
+        type: 'about',
+        title: 'Meet Your Full-Stack Digital Expert: Aman Mishra',
+        subtitle: '5+ years of proven expertise spanning full-stack development, SEO mastery, and strategic growth consulting. I\'ve helped 50+ businesses scale revenue, boost online visibility, and dominate their markets. When you work with me, you get a dedicated partner invested in your success—not just a vendor.',
+        buttonText: 'Discover My Story & Approach',
+        buttonLink: '/about',
+        order: 1,
+        visible: true,
+      },
+      {
+        type: 'features',
+        title: 'What Makes Us Different',
+        subtitle: 'Comprehensive digital solutions tailored to your needs',
+        order: 2,
+        visible: true,
+        features: [
+          {
+            title: 'Custom Development',
+            description: 'Full-stack web and mobile applications built for performance',
+          },
+          {
+            title: 'SEO & Growth',
+            description: 'Data-driven strategies that boost rankings and drive leads',
+          },
+          {
+            title: 'Digital Marketing',
+            description: 'Social media, PPC, and content strategies that convert',
+          },
+        ],
+      },
+      {
+        type: 'cta',
+        title: 'Ready to Accelerate Your Growth?',
+        subtitle: 'Limited availability for new projects this quarter. Let\'s discuss your vision and create a winning strategy today.',
+        buttonText: 'Schedule Your Strategy Call →',
+        buttonLink: '/contact',
+        order: 3,
+        visible: true,
+      },
+      {
+        type: 'clients',
+        title: 'Trusted by Industry Leaders',
+        subtitle: 'Partnering with 50+ companies worldwide',
+        order: 4,
+        visible: true,
+      },
+    ];
+
+    const created = await PageSection.insertMany(
+      defaultSections.map((section, idx) => ({
+        ...section,
+        versionHistory: [{
+          version: 1,
+          data: section,
+          createdAt: new Date(),
+          createdBy: 'system',
+        }],
+      }))
+    );
+
+    res.status(201).json({ message: 'Database seeded successfully', count: created.length });
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    res.status(500).json({ error: 'Failed to seed database' });
+  }
+});
+
+// Migrate data from code to database (MUST be before /:id)
+router.post('/migrate', requireAuth, async (req, res) => {
+  try {
+    const migratedSections = [
+      {
+        type: 'hero',
+        title: 'Your Digital Growth Partner – Proven Results, Trusted by Leaders',
+        subtitle: 'Custom web & mobile apps, data-driven marketing, and strategic SEO that deliver real ROI. 5+ years transforming ambitious businesses into digital powerhouses. Let\'s build something remarkable together.',
+        buttonText: 'Start Your Free Consultation →',
+        buttonLink: '/contact',
+        order: 0,
+        visible: true,
+      },
+      {
+        type: 'about',
+        title: 'Meet Your Full-Stack Digital Expert: Aman Mishra',
+        subtitle: '5+ years of proven expertise spanning full-stack development, SEO mastery, and strategic growth consulting. I\'ve helped 50+ businesses scale revenue, boost online visibility, and dominate their markets. When you work with me, you get a dedicated partner invested in your success—not just a vendor.',
+        buttonText: 'Discover My Story & Approach',
+        buttonLink: '/about',
+        order: 1,
+        visible: true,
+      },
+      {
+        type: 'cta',
+        title: 'Ready to Accelerate Your Growth?',
+        subtitle: 'Limited availability for new projects this quarter. Let\'s discuss your vision and create a winning strategy today.',
+        buttonText: 'Schedule Your Strategy Call →',
+        order: 2,
+        visible: true,
+      },
+    ];
+
+    // Delete existing sections first
+    await PageSection.deleteMany({});
+
+    // Insert migrated sections
+    const created = await PageSection.insertMany(
+      migratedSections.map((section, idx) => ({
+        ...section,
+        versionHistory: [{
+          version: 1,
+          data: section,
+          createdAt: new Date(),
+          createdBy: 'migration',
+        }],
+      }))
+    );
+
+    res.json({ message: 'Data migrated successfully', count: created.length });
+  } catch (error) {
+    console.error('Error migrating data:', error);
+    res.status(500).json({ error: 'Failed to migrate data' });
+  }
+});
+
 // Get all sections ordered
 router.get('/', async (req, res) => {
   try {

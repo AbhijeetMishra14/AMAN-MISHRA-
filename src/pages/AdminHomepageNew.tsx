@@ -4,7 +4,6 @@ import adminService from '../services/adminService';
 import AdminSidebar from '../components/AdminSidebar';
 import HomepagePreview from '../components/HomepagePreview';
 import './styles/AdminDashboard.css';
-import './styles/AdminHomepageNew.css';
 import '../components/HomepagePreview.css';
 
 interface Feature {
@@ -268,6 +267,25 @@ const AdminHomepageNew: React.FC = () => {
               <div className="sidebar-header">
                 <h3>{editingId ? 'Edit Section' : 'New Section'}</h3>
                 <button className="close-btn" onClick={() => setShowSidebar(false)}>×</button>
+                <button className="quick-edit-hero-btn" onClick={() => {
+                  const heroSection = sections.find(s => s.type === 'hero');
+                  if (heroSection) {
+                    setFormData({
+                      type: 'hero',
+                      title: heroSection.title || '',
+                      subtitle: heroSection.subtitle || '',
+                      description: heroSection.description || '',
+                      buttonText: heroSection.buttonText || '',
+                      buttonLink: heroSection.buttonLink || '',
+                      visible: heroSection.visible,
+                      features: heroSection.features || [],
+                    });
+                    setEditingId(heroSection._id);
+                    setShowSidebar(true);
+                  }
+                }}>
+                  ✨ Edit Hero Section
+                </button>
               </div>
 
               <div className="sidebar-content">
@@ -289,25 +307,45 @@ const AdminHomepageNew: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>Title</label>
+              <label>Hero Title *</label>
               <input
                 type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Section title"
+                value={formData.type === 'hero' ? formData.title : ''}
+                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Enter hero section title"
+                disabled={formData.type !== 'hero'}
               />
             </div>
-
             <div className="form-group">
-              <label>Subtitle</label>
+              <label>Hero Subtitle</label>
               <input
                 type="text"
-                value={formData.subtitle}
-                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                placeholder="Section subtitle"
+                value={formData.type === 'hero' ? formData.subtitle : ''}
+                onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
+                placeholder="Enter hero section subtitle"
+                disabled={formData.type !== 'hero'}
               />
             </div>
-
+            <div className="form-group">
+              <label>Hero Button Text</label>
+              <input
+                type="text"
+                value={formData.type === 'hero' ? formData.buttonText : ''}
+                onChange={e => setFormData({ ...formData, buttonText: e.target.value })}
+                placeholder="Enter hero button text"
+                disabled={formData.type !== 'hero'}
+              />
+            </div>
+            <div className="form-group">
+              <label>Hero Button Link</label>
+              <input
+                type="text"
+                value={formData.type === 'hero' ? formData.buttonLink : ''}
+                onChange={e => setFormData({ ...formData, buttonLink: e.target.value })}
+                placeholder="Enter hero button link"
+                disabled={formData.type !== 'hero'}
+              />
+            </div>
             <div className="form-group">
               <label>Description</label>
               <textarea

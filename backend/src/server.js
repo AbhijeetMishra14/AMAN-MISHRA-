@@ -51,6 +51,7 @@ app.use('/api/pricing', pricingRoutes);
 app.use('/api/jobs', jobsRoutes);
 app.use('/api/faq', faqRoutes);
 app.use('/api/sections', pageSectionsRoutes);
+app.use('/api/pageSections', pageSectionsRoutes);
 app.use('/api/testimonials', testimonialsRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 

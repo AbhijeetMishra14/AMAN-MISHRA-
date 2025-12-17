@@ -37,6 +37,19 @@ const BlogEditor: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Helper function to construct proper image URL
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return '';
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    // Otherwise construct the full URL
+    const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const apiBaseUrl = apiBase.replace('/api', '');
+    return `${apiBaseUrl}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+  };
+
   const categories = [
     'Uncategorized',
     'Company',
@@ -46,6 +59,10 @@ const BlogEditor: React.FC = () => {
     'Testing & Deployment',
     'Web Development'
   ];
+
+  const [showTableDialog, setShowTableDialog] = useState(false);
+  const [tableRows, setTableRows] = useState(3);
+  const [tableCols, setTableCols] = useState(3);
 
   const editor = useEditor({
     extensions: [
@@ -180,18 +197,42 @@ const BlogEditor: React.FC = () => {
 
   // Insert image into content
   const insertImage = (imageUrl: string) => {
+    const fullImageUrl = getImageUrl(imageUrl);
     editor?.chain()
       .focus()
       .insertContent({
         type: 'image',
         attrs: {
-          src: imageUrl,
+          src: fullImageUrl,
           alt: 'Blog image',
         },
       })
       .run();
     
     setShowImageSelector(false);
+  };
+
+  // Insert table into content
+  const insertTable = () => {
+    if (!editor || tableRows < 1 || tableCols < 1) {
+      setError('Please enter valid row and column numbers');
+      return;
+    }
+
+    let tableHTML = '<table><tbody>';
+    for (let i = 0; i < tableRows; i++) {
+      tableHTML += '<tr>';
+      for (let j = 0; j < tableCols; j++) {
+        tableHTML += `<td>${i === 0 && j === 0 ? 'Header' : 'Cell'}</td>`;
+      }
+      tableHTML += '</tr>';
+    }
+    tableHTML += '</tbody></table>';
+
+    editor.chain().focus().insertContent(tableHTML).run();
+    setShowTableDialog(false);
+    setTableRows(3);
+    setTableCols(3);
   };
 
   // Remove image from gallery
@@ -303,7 +344,7 @@ const BlogEditor: React.FC = () => {
       }
 
       setError('');
-      navigate('/admin/');
+      navigate('/admin/blog');
     } catch (err: unknown) {
       let message = 'Unknown error';
       if (err && typeof err === 'object' && 'response' in err) {
@@ -329,7 +370,7 @@ const BlogEditor: React.FC = () => {
           >
             {showPreview ? '👁️ Hide Preview' : '👁️ Show Preview'}
           </button>
-          <button onClick={() => navigate('/admin')} className="btn-back">
+          <button onClick={() => navigate('/admin/blog')} className="btn-back">
             ← Back
           </button>
         </div>
@@ -419,6 +460,9 @@ const BlogEditor: React.FC = () => {
               <button onClick={() => editor?.chain().focus().clearNodes().run()} className="toolbar-btn" title="Clear Formatting">
                 ✕
               </button>
+              <button onClick={() => setShowTableDialog(true)} className="toolbar-btn" title="Insert Table">
+                📊
+              </button>
             </div>
             <div
               ref={editorRef}
@@ -469,7 +513,12 @@ const BlogEditor: React.FC = () => {
               <div className="gallery-grid">
                 {images.map((img, idx) => (
                   <div key={idx} className="image-item">
-                    <img src={img} alt={`Blog ${idx}`} />
+                    <img 
+                      src={getImageUrl(img)} 
+                      alt={`Blog ${idx}`}
+                      onError={() => console.error('Uploaded image failed to load:', img, 'URL:', getImageUrl(img))}
+                      onLoad={() => console.log('Uploaded image loaded:', img)}
+                    />
                     <div className="image-item-actions">
                       <button
                         type="button"
@@ -604,11 +653,30 @@ const BlogEditor: React.FC = () => {
               <p className="preview-hint">How your blog will look</p>
             </div>
             <div className="preview-content">
-              {images[0] && (
-                <div className="preview-featured-image">
-                  <img src={images[0]} alt="Featured" />
-                </div>
-              )}
+              <div className="preview-featured-image">
+                {images && images.length > 0 && images[0] && images[0].trim() ? (
+                  <img 
+                    key={`featured-${images[0]}`}
+                    src={getImageUrl(images[0])} 
+                    alt="Featured" 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={(e) => {
+                      console.error('Featured image failed to load:', images[0], 'URL:', getImageUrl(images[0]));
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      const parent = (e.target as HTMLImageElement).parentElement;
+                      if (parent) {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'featured-placeholder';
+                        placeholder.textContent = '⚠️ Image failed to load';
+                        parent.appendChild(placeholder);
+                      }
+                    }}
+                    onLoad={() => console.log('Featured image loaded successfully:', getImageUrl(images[0]))}
+                  />
+                ) : (
+                  <div className="featured-placeholder">📸 No featured image yet</div>
+                )}
+              </div>
               <h1 className="preview-title">{title || 'Blog Title'}</h1>
               <p className="preview-date">{new Date().toLocaleDateString('en-US', { 
                 year: 'numeric', 
@@ -630,7 +698,14 @@ const BlogEditor: React.FC = () => {
                   <h4>Gallery</h4>
                   <div className="gallery-preview">
                     {images.slice(1).map((img, idx) => (
-                      <img key={idx} src={img} alt={`Gallery ${idx}`} />
+                      <img 
+                        key={`gallery-${idx}-${img}`}
+                        src={getImageUrl(img)} 
+                        alt={`Gallery ${idx}`}
+                        style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px' }}
+                        onError={() => console.error('Gallery image failed to load:', img)}
+                        onLoad={() => console.log('Gallery image loaded:', img)}
+                      />
                     ))}
                   </div>
                 </div>
@@ -724,6 +799,63 @@ const BlogEditor: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Table Dialog Modal */}
+      {showTableDialog && (
+        <div className="modal-overlay" onClick={() => setShowTableDialog(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>📊 Insert Table</h3>
+              <button 
+                onClick={() => setShowTableDialog(false)} 
+                className="modal-close"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <label>Number of Rows</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={tableRows}
+                  onChange={(e) => setTableRows(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="input-large"
+                  placeholder="Number of rows (1-20)"
+                />
+              </div>
+              <div className="form-group">
+                <label>Number of Columns</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={tableCols}
+                  onChange={(e) => setTableCols(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="input-large"
+                  placeholder="Number of columns (1-20)"
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                onClick={() => setShowTableDialog(false)}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={insertTable}
+                className="btn-insert-link"
+              >
+                Insert Table
+              </button>
             </div>
           </div>
         </div>

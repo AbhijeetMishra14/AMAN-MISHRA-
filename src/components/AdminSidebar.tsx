@@ -14,6 +14,9 @@ const AdminSidebar: React.FC = () => {
 
   return (
     <aside className="dashboard-sidebar">
+      <NavLink to="/admin/pages" className={getLinkClass('/admin/pages')}>
+        📄 Page Sections
+      </NavLink>
       <NavLink to="/admin/blog" className={getLinkClass('/admin/blog')}>
         📝 Blog Posts
       </NavLink>

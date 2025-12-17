@@ -4,6 +4,21 @@ import adminService from '../services/adminService';
 import './styles/AdminDashboard.css';
 import AdminSidebar from '../components/AdminSidebar';
 
+// Helper function to construct full image URL
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return '';
+  // If already a full URL, return as is
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  // If relative path, construct full URL
+  if (imagePath.startsWith('/')) {
+    return `http://localhost:5000${imagePath}`;
+  }
+  // If relative path without leading slash
+  return `http://localhost:5000/${imagePath}`;
+};
+
 interface Blog {
   _id: string;
   title: string;
@@ -136,7 +151,15 @@ const AdminDashboard: React.FC = () => {
                 <div key={blog._id} className={`blog-card ${blog.status}`}>
                   {blog.images && blog.images[0] && (
                     <div className="blog-thumb">
-                      <img src={blog.images[0]} alt={blog.title} />
+                      <img 
+                        src={getImageUrl(blog.images[0])} 
+                        alt={blog.title}
+                        onError={(e) => {
+                          console.warn(`Failed to load image: ${blog.images[0]}`);
+                          e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="16"%3E⚠️ Image failed to load%3C/text%3E%3C/svg%3E';
+                        }}
+                        onLoad={() => console.log(`Loaded image: ${blog.images[0]}`)}
+                      />
                     </div>
                   )}
                   <div className="blog-content">
